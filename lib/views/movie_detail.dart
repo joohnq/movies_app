@@ -33,7 +33,8 @@ class _MovieDetailState extends State<MovieDetail> {
   }
 
   Future initializeFavourite() async {
-    final isFavourite = await FavouritesService.getIfIsAlreadyFavourite(id);
+    final isFavourite =
+        await FavouritesService.getIfIsAlreadyFavourite(id.toString());
     setState(() {
       itsFavourite = isFavourite;
     });

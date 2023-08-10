@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,8 +30,8 @@ class _SliderCardState extends State<SliderCard> {
   }
 
   getFavouriteStatus() async {
-    bool isFavourite =
-        await FavouritesService.getIfIsAlreadyFavourite("${widget.item.id}");
+    bool isFavourite = await FavouritesService.getIfIsAlreadyFavourite(
+        widget.item.id.toString());
     setState(() {
       itsFavourite = isFavourite;
     });
@@ -106,7 +108,14 @@ class _SliderCardState extends State<SliderCard> {
                 setState(() {
                   itsFavourite = !itsFavourite;
                 });
-                FavouritesService.changeFavouriteStatus();
+                FavouritesService.changeFavouriteStatus(
+                    json.encode([
+                      widget.item.id.toString(),
+                      widget.item.name == ""
+                          ? widget.item.title
+                          : widget.item.name ?? '',
+                    ]),
+                    itsFavourite);
               },
               child: Container(
                 height: 35,

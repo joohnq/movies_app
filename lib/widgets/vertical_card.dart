@@ -7,7 +7,7 @@ import 'package:movies_app/service/favourites_service.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 
-class VerticalCard<T> extends StatefulWidget {
+class VerticalCard extends StatefulWidget {
   final Result item;
 
   const VerticalCard({
@@ -29,8 +29,8 @@ class _VerticalCardState extends State<VerticalCard> {
   }
 
   Future initializeFavourite() async {
-    final isFavourite =
-        await FavouritesService.getIfIsAlreadyFavourite("${widget.item.id}");
+    final isFavourite = await FavouritesService.getIfIsAlreadyFavourite(
+        widget.item.id.toString());
     setState(() {
       itsFavourite = isFavourite;
     });

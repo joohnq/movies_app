@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -114,7 +116,14 @@ class _HorizontalCardState extends State<HorizontalCard> {
                       setState(() {
                         itsFavourite = !itsFavourite;
                       });
-                      FavouritesService.changeFavouriteStatus();
+                      FavouritesService.changeFavouriteStatus(
+                          json.encode([
+                            widget.item.id.toString(),
+                            widget.item.name == ""
+                                ? widget.item.title
+                                : widget.item.name ?? '',
+                          ]),
+                          itsFavourite);
                     },
                     child: Container(
                       height: 35,

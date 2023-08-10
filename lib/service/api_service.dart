@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:movies_app/models/credits.dart';
@@ -24,41 +26,33 @@ class MovieService {
         );
 
   static Future<List<Result>> getWithIds(List<String> encodedList) async {
-    // List<Future<Result>> futures = [];
-    // List<Map<String, String>> listDecoded = [];
-    // for (String encodedItem in encodedList) {
-    //   Map<String, dynamic> decodedItem = json.decode(encodedItem);
-    //   listDecoded.add(item);
-    // }
-    //
-    // for (String item in listDecoded) {
-    //   futures.add(
-    //     getWithId(
-    //       int.parse(item[0]),
-    //       item[1],
-    //     ),
-    //   );
-    // }
-    //
-    // List<Result> results = await Future.wait(futures);
+    List<Future<Result>> futures = [];
+    List<List> listDecoded = [];
+    for (String encodedItem in encodedList) {
+      listDecoded.add(json.decode(encodedItem));
+    }
+    for (List item in listDecoded) {
+      futures.add(
+        getWithId(
+          int.parse(item[0]),
+          item[1],
+        ),
+      );
+    }
 
-    return [];
+    return await Future.wait(futures);
   }
 
   static Future<Result> getWithId(int id, String title) async {
     try {
-      final response = await dio.get(
-        '${baseUrl}tv/$id?api_key=${dotenv.env['API_KEY']!}',
+      return Result.fromJson(
+        await MovieService().tmdb.v3.movies.getDetails(id),
       );
-
-      return Result.fromJson(response.data);
     } catch (error) {
       try {
-        final response = await dio.get(
-          '${baseUrl}movie/$id?api_key=${dotenv.env['API_KEY']!}',
+        return Result.fromJson(
+          await MovieService().tmdb.v3.tv.getDetails(id),
         );
-
-        return Result.fromJson(response.data);
       } catch (error) {
         print('Erro ao fazer a chamada da API: $error');
         throw Exception('error');

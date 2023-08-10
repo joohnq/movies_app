@@ -21,16 +21,13 @@ class _FavouritesState extends State<Favourites> {
   @override
   void initState() {
     super.initState();
-    loadFavourites();
+    favourites = loadFavourites();
   }
 
-  Future<void> loadFavourites() async {
+  Future<List<Result>> loadFavourites() async {
     List<String> cacheIds = await PreferencesService.getFavourites();
-    List<Result> favourites = await MovieService.getWithIds(cacheIds);
 
-    setState(() {
-      favourites = favourites;
-    });
+    return await MovieService.getWithIds(cacheIds);
   }
 
   @override
@@ -57,18 +54,20 @@ class _FavouritesState extends State<Favourites> {
               future: favourites,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Column(
-                    children: List.generate(
-                      2,
-                      (_) => const Column(
-                        children: [
-                          PreLoadVerticalCard(),
-                          SizedBox(
-                            height: 20,
-                          ),
-                        ],
-                      ),
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: width / height,
+                      crossAxisSpacing: 10.0,
                     ),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: 4,
+                    itemBuilder: (context, index) {
+                      return const PreLoadVerticalCard();
+                    },
                   );
                 } else if (snapshot.hasError) {
                   return Text(
@@ -106,7 +105,7 @@ class _FavouritesState extends State<Favourites> {
                   shrinkWrap: true,
                   itemCount: favourites.length,
                   itemBuilder: (context, index) {
-                    return VerticalCard<Result>(
+                    return VerticalCard(
                       item: favourites[index],
                     );
                   },

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -27,8 +29,8 @@ class _EmphasisHomeContentState extends State<EmphasisHomeContent> {
   }
 
   getFavouriteStatus() async {
-    bool isFavourite =
-        await FavouritesService.getIfIsAlreadyFavourite("${widget.item.id}");
+    bool isFavourite = await FavouritesService.getIfIsAlreadyFavourite(
+        widget.item.id.toString());
     setState(() {
       itsFavourite = isFavourite;
     });
@@ -149,42 +151,51 @@ class _EmphasisHomeContentState extends State<EmphasisHomeContent> {
             Positioned(
               right: 20,
               top: statusBar + 10,
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    itsFavourite = !itsFavourite;
-                  });
-                  FavouritesService.changeFavouriteStatus();
-                },
-                child: itsFavourite
-                    ? const Icon(
-                        Icons.bookmark,
-                        color: Pallete.white,
-                        size: 30,
-                      )
-                    : const Icon(
-                        Icons.bookmark_border,
-                        color: Pallete.white,
-                        size: 30,
-                      ),
-              ),
-            ),
-            Positioned(
-              top: 70,
-              right: 20,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                decoration: const BoxDecoration(
-                  color: Pallete.yellow,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(5),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        itsFavourite = !itsFavourite;
+                      });
+                      FavouritesService.changeFavouriteStatus(
+                          json.encode([
+                            widget.item.id.toString(),
+                            widget.item.name == ""
+                                ? widget.item.title
+                                : widget.item.name ?? '',
+                          ]),
+                          itsFavourite);
+                    },
+                    child: itsFavourite
+                        ? const Icon(
+                            Icons.bookmark,
+                            color: Pallete.white,
+                            size: 30,
+                          )
+                        : const Icon(
+                            Icons.bookmark_border,
+                            color: Pallete.white,
+                            size: 30,
+                          ),
                   ),
-                ),
-                child: Text(
-                  widget.item.voteAverage.toStringAsFixed(1),
-                  style: StyleFont.bold
-                      .copyWith(color: Pallete.grayDark, fontSize: 14),
-                ),
+                  const SizedBox(height: 5),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                    decoration: const BoxDecoration(
+                      color: Pallete.yellow,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(5),
+                      ),
+                    ),
+                    child: Text(
+                      widget.item.voteAverage.toStringAsFixed(1),
+                      style: StyleFont.bold
+                          .copyWith(color: Pallete.grayDark, fontSize: 14),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

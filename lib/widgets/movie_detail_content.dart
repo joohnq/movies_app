@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -118,7 +120,14 @@ class _MovieDetailContentState extends State<MovieDetailContent> {
                                     setState(() {
                                       itsFavourite = !itsFavourite;
                                     });
-                                    FavouritesService.changeFavouriteStatus();
+                                    FavouritesService.changeFavouriteStatus(
+                                        json.encode([
+                                          widget.item!.id.toString(),
+                                          widget.item!.name == ""
+                                              ? widget.item!.title
+                                              : widget.item!.name ?? '',
+                                        ]),
+                                        itsFavourite);
                                   },
                                   child: itsFavourite
                                       ? const Icon(
