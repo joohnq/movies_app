@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/icon_park_outline.dart';
+import 'package:iconify_flutter/icons/icon_park_solid.dart';
 import 'package:movies_app/models/movies_series.dart';
 import 'package:movies_app/service/api_service.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/views/favourites.dart';
 import 'package:movies_app/views/home.dart';
 import 'package:movies_app/views/search.dart';
-import 'package:iconify_flutter/icons/icon_park_solid.dart';
 
 MovieService movieService = MovieService();
 
@@ -19,7 +19,6 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  late Future<Result> emphasis;
   late Future<List<Result>> trending;
   late Future<List<Result>> shortly;
   int selectedIndex = 0;
@@ -27,7 +26,6 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    emphasis = MovieService.emphasis().then((value) => value.results[0]);
     trending = MovieService.trending(1).then((value) => value.results);
     shortly = MovieService.shortly().then((value) => value.results);
   }
@@ -36,7 +34,6 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     final List<Widget> screens = [
       Home(
-        emphasis: emphasis,
         trending: trending,
         shortly: shortly,
       ),
@@ -46,7 +43,10 @@ class _AppState extends State<App> {
 
     return Scaffold(
       backgroundColor: Pallete.grayDark,
-      body: screens[selectedIndex],
+      body: IndexedStack(
+        index: selectedIndex,
+        children: screens,
+      ),
       bottomNavigationBar: Theme(
         data: ThemeData(
           splashColor: Colors.transparent,

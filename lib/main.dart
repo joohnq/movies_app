@@ -21,7 +21,6 @@ main() async {
     GetMaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
-      onInit: () {},
       getPages: [
         GetPage(
           name: '/',

@@ -19,12 +19,9 @@ class Discover extends StatefulWidget {
 }
 
 class _DiscoverState extends State<Discover> {
-  late Future<List<Result>> movies = Future<List<Result>>.value([]);
+  late Future<List<Result>> movies;
   int page = 1;
-  final controller = TextEditingController();
-  final FocusScopeNode focusNode = FocusScopeNode();
   int whatIsTrue = 0;
-  List<Result> oldMovie = [];
 
   @override
   void initState() {
@@ -32,58 +29,29 @@ class _DiscoverState extends State<Discover> {
     movies = fetchApiTrending(1).then((value) => value.results);
   }
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
   Future<MoviesAndSeries> fetchApiTrending(int page) async {
-    return MovieService.trending(page);
+    return await MovieService.trending(page);
   }
 
-  loadMoreMovies() async {
-    setState(() {
-      page++;
-    });
-    try {
-      List<Result> newMovies =
-          await MovieService.trending(page).then((value) => value.results);
-      List<Result> existingMovies = await movies;
-      List<Result> updatedMovies = [...existingMovies, ...newMovies];
-      setState(() {
-        movies = Future.value(updatedMovies);
-      });
-    } catch (error) {
-      Exception('Erro ao buscar filmes: $error');
-    }
-  }
-
-  updateWhatIsTrue(int index, String id) {
-    if (index != whatIsTrue || index == 0) {
-      setState(() {
-        movies = searchCategory(id).then((value) => value.results);
-        whatIsTrue = index;
-      });
-    }
-  }
+  // loadMoreMovies() async {
+  //   setState(() {
+  //     page++;
+  //   });
+  //   try {
+  //     List<Result> newMovies =
+  //         await MovieService.trending(page).then((value) => value.results);
+  //     List<Result> existingMovies = await movies;
+  //     List<Result> updatedMovies = [...existingMovies, ...newMovies];
+  //     setState(() {
+  //       movies = Future.value(updatedMovies);
+  //     });
+  //   } catch (error) {
+  //     Exception('Erro ao buscar filmes: $error');
+  //   }
+  // }
 
   Future<MoviesAndSeries> searchCategory(String category) async {
     return MovieService.searchByCategory(category);
-  }
-
-  searchWithName(String name) async {
-    if (controller.text.isNotEmpty && controller.selection.isValid) {
-      String searchText = controller.text;
-      setState(() {
-        movies = MovieService.searchByName(searchText);
-      });
-    } else {
-      throw Exception(
-          "Invalid input: The search text is empty or selection is invalid.");
-    }
-    controller.text = "";
-    focusNode.unfocus();
   }
 
   @override
@@ -97,15 +65,12 @@ class _DiscoverState extends State<Discover> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 10,
-                ),
-                child: Column(
-                  children: [
-                    Row(
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    child: Row(
                       children: [
                         GestureDetector(
                           onTap: () {
@@ -123,86 +88,69 @@ class _DiscoverState extends State<Discover> {
                         const CustomTitle(text: "Discover"),
                       ],
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                      height: 40,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: categories.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          if (index == whatIsTrue) {
-                            return GestureDetector(
-                              onTap: () {
-                                updateWhatIsTrue(
-                                    index, categories[index]['id']);
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Pallete.yellow,
-                                ),
-                                margin: const EdgeInsets.only(right: 10),
-                                child: Center(
-                                  child: Text(
-                                    categories[index]['name'],
-                                    style: StyleFont.bold.copyWith(
-                                      color: Pallete.grayDark,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          } else {
-                            return GestureDetector(
-                              onTap: () {
-                                updateWhatIsTrue(
-                                    index, categories[index]['id']);
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Pallete.grayLight,
-                                ),
-                                margin: const EdgeInsets.only(right: 10),
-                                child: Center(
-                                  child: Text(
-                                    categories[index]['name'],
-                                    style: StyleFont.bold.copyWith(
-                                      color: Pallete.white,
-                                      fontSize: 16,
-                                    ),
-                                  ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  SizedBox(
+                    height: 40,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: categories.length,
+                      padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
+                      itemBuilder: (BuildContext context, int index) {
+                        return GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: index == whatIsTrue
+                                  ? Pallete.yellow
+                                  : Pallete.grayLight,
+                            ),
+                            margin: const EdgeInsets.only(right: 10),
+                            child: Center(
+                              child: Text(
+                                categories[index]['name'],
+                                style: StyleFont.bold.copyWith(
+                                  color: index == whatIsTrue
+                                      ? Pallete.grayDark
+                                      : Pallete.white,
+                                  fontSize: 16,
                                 ),
                               ),
-                            );
-                          }
-                        },
-                      ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  ],
-                ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
               ),
               FutureBuilder<List<Result>>(
                 future: movies,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Column(
-                      children: [
-                        for (var _ in [0, 1])
-                          const Column(
-                            children: [
-                              PreLoadVerticalCard(),
-                              SizedBox(height: 20),
-                            ],
-                          ),
-                      ],
+                    return GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 0,
+                        crossAxisSpacing: 10,
+                        childAspectRatio: width * 0.64 / width,
+                      ),
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 0),
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: 6,
+                      itemBuilder: (context, index) {
+                        return const PreLoadVerticalCard();
+                      },
                     );
                   } else if (snapshot.hasError) {
                     return Text(
@@ -230,16 +178,16 @@ class _DiscoverState extends State<Discover> {
                     );
                   }
                   List<Result> movie = snapshot.data!.toList();
+
                   return GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       mainAxisSpacing: 0,
                       crossAxisSpacing: 10,
-                      childAspectRatio: width / height,
+                      childAspectRatio: width * 0.64 / width,
                     ),
                     shrinkWrap: true,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: (movie.length / 2).ceil(),
                     itemBuilder: (context, index) {
@@ -251,9 +199,7 @@ class _DiscoverState extends State<Discover> {
                 },
               ),
               GestureDetector(
-                onTap: () {
-                  loadMoreMovies();
-                },
+                onTap: () {},
                 child: Container(
                   margin: const EdgeInsets.symmetric(vertical: 20),
                   width: MediaQuery.of(context).size.width * 0.4,

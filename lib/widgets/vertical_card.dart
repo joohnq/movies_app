@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movies_app/models/getx_atributes.dart';
 import 'package:movies_app/models/movies_series.dart';
-import 'package:movies_app/service/favourites_service.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 
@@ -20,20 +19,9 @@ class VerticalCard extends StatefulWidget {
 }
 
 class _VerticalCardState extends State<VerticalCard> {
-  bool itsFavourite = false;
-
   @override
   void initState() {
     super.initState();
-    initializeFavourite();
-  }
-
-  Future initializeFavourite() async {
-    final isFavourite = await FavouritesService.getIfIsAlreadyFavourite(
-        widget.item.id.toString());
-    setState(() {
-      itsFavourite = isFavourite;
-    });
   }
 
   @override
@@ -61,7 +49,7 @@ class _VerticalCardState extends State<VerticalCard> {
             Stack(
               children: [
                 Container(
-                  height: height * 0.4,
+                  height: width * 0.64,
                   width: width,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
@@ -72,15 +60,15 @@ class _VerticalCardState extends State<VerticalCard> {
                       imageUrl:
                           "https://image.tmdb.org/t/p/w500${widget.item.posterPath}",
                       placeholder: (context, url) => Container(
-                        height: height * 0.4,
-                        width: height * 0.4,
+                        height: width * 0.64,
+                        width: width,
                         decoration: BoxDecoration(
                           color: Pallete.preLoad,
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       errorWidget: (context, url, error) => Container(
-                        height: height * 0.4,
+                        height: width * 0.64,
                         width: width,
                         decoration: const BoxDecoration(
                           color: Pallete.preLoad,
@@ -99,7 +87,7 @@ class _VerticalCardState extends State<VerticalCard> {
                       imageBuilder: (context, imageProvider) {
                         return Container(
                           width: width,
-                          height: height * 0.4,
+                          height: width * 0.64,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
@@ -113,7 +101,7 @@ class _VerticalCardState extends State<VerticalCard> {
                   ),
                 ),
                 Container(
-                  height: height * 0.4,
+                  height: width * 0.64,
                   width: width,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
@@ -124,32 +112,12 @@ class _VerticalCardState extends State<VerticalCard> {
                   top: 10,
                   right: 10,
                   child: GestureDetector(
-                    onTap: () {
-                      // setState(() {
-                      //   itsFavourite = !itsFavourite;
-                      // });
-                      // FavouritesService.changeFavouriteStatus(
-                      //     widget.item.id, itsFavourite);
-                      // if (isFavorite) {
-                      //   favouritesProvider.handleFavourite(
-                      //       widget.item.id, isFavorite);
-                      // } else {
-                      //   favouritesProvider.handleFavourite(
-                      //       widget.item.id, isFavorite);
-                      // }
-                    },
-                    child: itsFavourite
-                        ? const Icon(
-                            Icons.bookmark,
-                            color: Pallete.white,
-                            size: 30,
-                          )
-                        : const Icon(
-                            Icons.bookmark_border_outlined,
-                            color: Pallete.white,
-                            size: 30,
-                          ),
-                  ),
+                      onTap: () {},
+                      child: const Icon(
+                        Icons.bookmark,
+                        color: Pallete.white,
+                        size: 30,
+                      )),
                 ),
                 Positioned(
                   top: 50,

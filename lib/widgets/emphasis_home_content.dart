@@ -1,12 +1,9 @@
-import 'dart:convert';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movies_app/models/getx_atributes.dart';
 import 'package:movies_app/models/movies_series.dart';
-import 'package:movies_app/service/favourites_service.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 
@@ -20,20 +17,9 @@ class EmphasisHomeContent extends StatefulWidget {
 }
 
 class _EmphasisHomeContentState extends State<EmphasisHomeContent> {
-  late bool itsFavourite = false;
-
   @override
   void initState() {
     super.initState();
-    getFavouriteStatus();
-  }
-
-  getFavouriteStatus() async {
-    bool isFavourite = await FavouritesService.getIfIsAlreadyFavourite(
-        widget.item.id.toString());
-    setState(() {
-      itsFavourite = isFavourite;
-    });
   }
 
   @override
@@ -41,6 +27,7 @@ class _EmphasisHomeContentState extends State<EmphasisHomeContent> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.height;
     double statusBar = MediaQuery.of(context).padding.top;
+
     return Container(
       height: height * 0.5,
       width: width,
@@ -154,31 +141,12 @@ class _EmphasisHomeContentState extends State<EmphasisHomeContent> {
               child: Column(
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        itsFavourite = !itsFavourite;
-                      });
-                      FavouritesService.changeFavouriteStatus(
-                          json.encode([
-                            widget.item.id.toString(),
-                            widget.item.name == ""
-                                ? widget.item.title
-                                : widget.item.name ?? '',
-                          ]),
-                          itsFavourite);
-                    },
-                    child: itsFavourite
-                        ? const Icon(
-                            Icons.bookmark,
-                            color: Pallete.white,
-                            size: 30,
-                          )
-                        : const Icon(
-                            Icons.bookmark_border,
-                            color: Pallete.white,
-                            size: 30,
-                          ),
-                  ),
+                      onTap: () {},
+                      child: const Icon(
+                        Icons.bookmark,
+                        color: Pallete.white,
+                        size: 30,
+                      )),
                   const SizedBox(height: 5),
                   Container(
                     padding:

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/models/movies_series.dart';
-import 'package:movies_app/service/api_service.dart';
-import 'package:movies_app/service/preferences_service.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 import 'package:movies_app/widgets/custom_title.dart';
@@ -21,13 +19,6 @@ class _FavouritesState extends State<Favourites> {
   @override
   void initState() {
     super.initState();
-    favourites = loadFavourites();
-  }
-
-  Future<List<Result>> loadFavourites() async {
-    List<String> cacheIds = await PreferencesService.getFavourites();
-
-    return await MovieService.getWithIds(cacheIds);
   }
 
   @override

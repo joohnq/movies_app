@@ -3,18 +3,16 @@ import 'package:get/get.dart';
 import 'package:movies_app/models/movies_series.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
+import 'package:movies_app/widgets/carousel_slider.dart';
 import 'package:movies_app/widgets/custom_title.dart';
 import 'package:movies_app/widgets/emphasis_home.dart';
-import 'package:movies_app/widgets/carousel_slider.dart';
 
 class Home extends StatelessWidget {
-  final Future<Result> emphasis;
   final Future<List<Result>> trending;
   final Future<List<Result>> shortly;
 
   const Home({
     super.key,
-    required this.emphasis,
     required this.trending,
     required this.shortly,
   });
@@ -27,7 +25,7 @@ class Home extends StatelessWidget {
         child: Column(
           children: [
             EmphasisHome(
-              item: emphasis,
+              item: trending,
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),

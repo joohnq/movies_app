@@ -1,7 +1,3 @@
-// ignore_for_file: avoid_print
-
-import 'dart:convert';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +5,6 @@ import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:get/get.dart';
 import 'package:movies_app/models/getx_atributes.dart';
 import 'package:movies_app/models/movies_series.dart';
-import 'package:movies_app/service/favourites_service.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 
@@ -23,20 +18,9 @@ class HorizontalCard extends StatefulWidget {
 }
 
 class _HorizontalCardState extends State<HorizontalCard> {
-  bool itsFavourite = false;
-
   @override
   void initState() {
     super.initState();
-    getFavouriteStatus();
-  }
-
-  getFavouriteStatus() async {
-    bool isFavourite =
-        await FavouritesService.getIfIsAlreadyFavourite("${widget.item.id}");
-    setState(() {
-      itsFavourite = isFavourite;
-    });
   }
 
   @override
@@ -113,17 +97,7 @@ class _HorizontalCardState extends State<HorizontalCard> {
                   left: 0,
                   child: GestureDetector(
                     onTap: () {
-                      setState(() {
-                        itsFavourite = !itsFavourite;
-                      });
-                      FavouritesService.changeFavouriteStatus(
-                          json.encode([
-                            widget.item.id.toString(),
-                            widget.item.name == ""
-                                ? widget.item.title
-                                : widget.item.name ?? '',
-                          ]),
-                          itsFavourite);
+
                     },
                     child: Container(
                       height: 35,
@@ -135,17 +109,11 @@ class _HorizontalCardState extends State<HorizontalCard> {
                           topLeft: Radius.circular(5),
                         ),
                       ),
-                      child: itsFavourite
-                          ? const Icon(
-                              Icons.bookmark,
-                              color: Pallete.grayDark,
-                              size: 30,
-                            )
-                          : const Icon(
-                              Icons.bookmark_border_outlined,
-                              color: Pallete.grayDark,
-                              size: 30,
-                            ),
+                      child: const Icon(
+                        Icons.bookmark,
+                        color: Pallete.grayDark,
+                        size: 30,
+                      )
                     ),
                   ),
                 ),

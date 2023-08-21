@@ -7,19 +7,23 @@ String moviesApiToJson(MoviesAndSeries data) => json.encode(data.toJson());
 
 class MoviesAndSeries {
   List<Result> results;
+  int totalPages;
 
   MoviesAndSeries({
     required this.results,
+    required this.totalPages,
   });
 
   factory MoviesAndSeries.fromJson(Map<dynamic, dynamic> json) =>
       MoviesAndSeries(
         results:
             List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
+        totalPages: json["total_pages"],
       );
 
   Map<dynamic, dynamic> toJson() => {
         "results": List<dynamic>.from(results.map((x) => x.toJson())),
+        "total_pages": totalPages,
       };
 }
 
@@ -31,6 +35,8 @@ class Result {
   String? originalTitle;
   String overview;
   String posterPath;
+  String? releaseDate;
+  String? originalLanguage;
   String title;
   double voteAverage;
   String? name;
@@ -46,6 +52,8 @@ class Result {
     this.originalTitle,
     required this.overview,
     required this.posterPath,
+    this.releaseDate,
+    this.originalLanguage,
     required this.title,
     required this.voteAverage,
     this.name,
@@ -66,6 +74,8 @@ class Result {
         originalTitle: json["original_title"] ?? "",
         overview: json["overview"] ?? "",
         posterPath: json["poster_path"] ?? "",
+        releaseDate: json["release_date"] ?? "",
+        originalLanguage: json["original_language"] ?? "",
         title: json["title"] ?? "",
         voteAverage: json["vote_average"]?.toDouble() ?? 0.0,
         name: json["name"] ?? "",
@@ -79,7 +89,7 @@ class Result {
             : [],
       );
 
-  Map<dynamic, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "backdrop_path": backdropPath,
         "genres": List<dynamic>.from(genres!.map((x) => x.toJson())),
         "genre_ids": List<dynamic>.from(genreIds!.map((x) => x)),
@@ -87,6 +97,8 @@ class Result {
         "original_title": originalTitle,
         "overview": overview,
         "poster_path": posterPath,
+        "release_date": releaseDate,
+        "original_language": originalLanguage,
         "title": title,
         "vote_average": voteAverage,
         "name": name,
@@ -186,5 +198,38 @@ class Season {
         "poster_path": posterPath,
         "season_number": seasonNumber,
         "vote_average": voteAverage,
+      };
+}
+
+class MovieImages {
+  List<Backdrop> backdrops;
+
+  MovieImages({
+    required this.backdrops,
+  });
+
+  factory MovieImages.fromJson(Map<dynamic, dynamic> json) => MovieImages(
+        backdrops: List<Backdrop>.from(
+            json["backdrops"].map((x) => Backdrop.fromJson(x))),
+      );
+
+  Map<dynamic, dynamic> toJson() => {
+        "backdrops": List<dynamic>.from(backdrops.map((x) => x.toJson())),
+      };
+}
+
+class Backdrop {
+  String filePath;
+
+  Backdrop({
+    required this.filePath,
+  });
+
+  factory Backdrop.fromJson(Map<dynamic, dynamic> json) => Backdrop(
+        filePath: json["file_path"],
+      );
+
+  Map<dynamic, dynamic> toJson() => {
+        "file_path": filePath,
       };
 }

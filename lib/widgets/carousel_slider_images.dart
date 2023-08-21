@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:movies_app/models/movie_images.dart';
+import 'package:movies_app/models/movies_series.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/widgets/future_prompt.dart';
 import 'package:movies_app/widgets/pre_load_carousel_slider.dart';
@@ -115,8 +115,7 @@ class _CarouselSliderImagesState extends State<CarouselSliderImages> {
                         child: Container(
                           width: 7,
                           height: 7,
-                          margin:
-                          const EdgeInsets.symmetric(horizontal: 2),
+                          margin: const EdgeInsets.symmetric(horizontal: 2),
                           decoration: BoxDecoration(
                             color: widget.current == index
                                 ? Pallete.yellow

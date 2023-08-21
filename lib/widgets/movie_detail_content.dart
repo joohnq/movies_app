@@ -1,14 +1,12 @@
-import 'dart:convert';
-
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:movies_app/formatting.dart';
 import 'package:movies_app/models/credits.dart';
-import 'package:movies_app/models/movie_images.dart';
 import 'package:movies_app/models/movies_series.dart';
 import 'package:movies_app/service/api_service.dart';
-import 'package:movies_app/service/favourites_service.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 import 'package:movies_app/widgets/carousel_slider_images.dart';
@@ -19,15 +17,11 @@ import 'package:movies_app/widgets/seasons.dart';
 
 class MovieDetailContent extends StatefulWidget {
   final Result? item;
-  final bool itsFavourite;
-  final Function(bool) setFavouriteState;
   final Future<List<Backdrop>> images;
 
   const MovieDetailContent({
     Key? key,
     required this.item,
-    required this.itsFavourite,
-    required this.setFavouriteState,
     required this.images,
   }) : super(key: key);
 
@@ -37,14 +31,12 @@ class MovieDetailContent extends StatefulWidget {
 
 class _MovieDetailContentState extends State<MovieDetailContent> {
   late final Future<CreditsModel> credits;
-  bool itsFavourite = false;
   int current = 0;
 
   @override
   void initState() {
     super.initState();
     credits = MovieService.credits(widget.item!.id);
-    itsFavourite = widget.itsFavourite;
   }
 
   updateCurrent(index) {
@@ -106,9 +98,7 @@ class _MovieDetailContentState extends State<MovieDetailContent> {
                               ),
                             ),
                             GestureDetector(
-                              onTap: () {
-                                widget.setFavouriteState(!widget.itsFavourite);
-                              },
+                              onTap: () {},
                               child: Container(
                                 width: 40,
                                 height: 40,
@@ -116,30 +106,12 @@ class _MovieDetailContentState extends State<MovieDetailContent> {
                                     color: const Color.fromRGBO(0, 0, 0, 0.7),
                                     borderRadius: BorderRadius.circular(40)),
                                 child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      itsFavourite = !itsFavourite;
-                                    });
-                                    FavouritesService.changeFavouriteStatus(
-                                        json.encode([
-                                          widget.item!.id.toString(),
-                                          widget.item!.name == ""
-                                              ? widget.item!.title
-                                              : widget.item!.name ?? '',
-                                        ]),
-                                        itsFavourite);
-                                  },
-                                  child: itsFavourite
-                                      ? const Icon(
-                                          Icons.bookmark_outline_rounded,
-                                          size: 30,
-                                          color: Pallete.white,
-                                        )
-                                      : const Icon(
-                                          Icons.bookmark,
-                                          size: 30,
-                                          color: Pallete.white,
-                                        ),
+                                  onTap: () {},
+                                  child: const Icon(
+                                    Icons.bookmark_outline_rounded,
+                                    size: 30,
+                                    color: Pallete.white,
+                                  ),
                                 ),
                               ),
                             )
@@ -152,38 +124,107 @@ class _MovieDetailContentState extends State<MovieDetailContent> {
                 Positioned(
                   left: 20,
                   top: (height * 0.3) - 50,
-                  child: SizedBox(
-                    height: (height * 0.3) + 50,
-                    width: ((height * 0.3) + 50) * 0.64,
-                    child: CachedNetworkImage(
-                      imageUrl:
-                          "https://image.tmdb.org/t/p/w780${widget.item!.posterPath}",
-                      placeholder: (context, url) => Container(
-                        height: height,
-                        width: width,
-                        decoration: const BoxDecoration(
-                          color: Pallete.preLoad,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      SizedBox(
+                        height: (height * 0.3) + 50,
+                        width: ((height * 0.3) + 50) * 0.64,
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              "https://image.tmdb.org/t/p/w780${widget.item!.posterPath}",
+                          placeholder: (context, url) => Container(
+                            height: height,
+                            width: width,
+                            decoration: const BoxDecoration(
+                              color: Pallete.preLoad,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
+                              ),
+                            ),
                           ),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                          imageBuilder: (context, imageProvider) {
+                            return Container(
+                              width: width,
+                              height: height,
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
+                                image: DecorationImage(
+                                    image: imageProvider, fit: BoxFit.cover),
+                              ),
+                            );
+                          },
                         ),
                       ),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                      imageBuilder: (context, imageProvider) {
-                        return Container(
-                          width: width,
-                          height: height,
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(20),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 2),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Pallete.grayLight),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(5),
+                              ),
                             ),
-                            image: DecorationImage(
-                                image: imageProvider, fit: BoxFit.cover),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.language,
+                                  color: Pallete.white,
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                AutoSizeText(
+                                  widget.item!.originalLanguage![0],
+                                  maxLines: 1,
+                                  style: StyleFont.medium
+                                      .copyWith(color: Pallete.white),
+                                ),
+                              ],
+                            ),
                           ),
-                        );
-                      },
-                    ),
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 2),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Pallete.grayLight),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(5),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.calendar_month,
+                                  color: Pallete.white,
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  Formating.formatDate(
+                                      widget.item!.releaseDate!),
+                                  style: StyleFont.medium
+                                      .copyWith(color: Pallete.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                 ),
               ],
@@ -226,15 +267,10 @@ class _MovieDetailContentState extends State<MovieDetailContent> {
                                     size: 24,
                                     color: Pallete.yellow,
                                   ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        widget.item!.voteAverage
-                                            .toStringAsFixed(1),
-                                        style: StyleFont.bold.copyWith(
-                                            color: Pallete.white, fontSize: 14),
-                                      ),
-                                    ],
+                                  Text(
+                                    widget.item!.voteAverage.toStringAsFixed(1),
+                                    style: StyleFont.bold.copyWith(
+                                        color: Pallete.white, fontSize: 14),
                                   )
                                 ],
                               ),

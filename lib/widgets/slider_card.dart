@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movies_app/models/getx_atributes.dart';
 import 'package:movies_app/models/movies_series.dart';
-import 'package:movies_app/service/favourites_service.dart';
 import 'package:movies_app/style/colors.dart';
 
 class SliderCard extends StatefulWidget {
@@ -21,20 +18,9 @@ class SliderCard extends StatefulWidget {
 }
 
 class _SliderCardState extends State<SliderCard> {
-  late bool itsFavourite = false;
-
   @override
   void initState() {
     super.initState();
-    getFavouriteStatus();
-  }
-
-  getFavouriteStatus() async {
-    bool isFavourite = await FavouritesService.getIfIsAlreadyFavourite(
-        widget.item.id.toString());
-    setState(() {
-      itsFavourite = isFavourite;
-    });
   }
 
   @override
@@ -104,41 +90,22 @@ class _SliderCardState extends State<SliderCard> {
             top: 0,
             left: 0,
             child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  itsFavourite = !itsFavourite;
-                });
-                FavouritesService.changeFavouriteStatus(
-                    json.encode([
-                      widget.item.id.toString(),
-                      widget.item.name == ""
-                          ? widget.item.title
-                          : widget.item.name ?? '',
-                    ]),
-                    itsFavourite);
-              },
+              onTap: () {},
               child: Container(
-                height: 35,
-                width: 35,
-                decoration: const BoxDecoration(
-                  color: Pallete.yellow,
-                  borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(10),
-                    topLeft: Radius.circular(10),
+                  height: 35,
+                  width: 35,
+                  decoration: const BoxDecoration(
+                    color: Pallete.yellow,
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(10),
+                      topLeft: Radius.circular(10),
+                    ),
                   ),
-                ),
-                child: itsFavourite
-                    ? const Icon(
-                        Icons.bookmark,
-                        color: Pallete.grayDark,
-                        size: 30,
-                      )
-                    : const Icon(
-                        Icons.bookmark_border_outlined,
-                        color: Pallete.grayDark,
-                        size: 30,
-                      ),
-              ),
+                  child: const Icon(
+                    Icons.bookmark,
+                    color: Pallete.grayDark,
+                    size: 30,
+                  )),
             ),
           ),
         ],

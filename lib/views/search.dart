@@ -19,7 +19,7 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   final controller = TextEditingController();
-  final FocusScopeNode focusNode = FocusScopeNode();
+  final FocusNode focusNode = FocusNode();
   late Future<List<Result>> items = Future<List<Result>>.value([]);
 
   @override
@@ -137,7 +137,8 @@ class _SearchState extends State<Search> {
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: movie.length,
-                  separatorBuilder: (context, index) => const SizedBox(height: 10),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 10),
                   itemBuilder: (context, index) {
                     return HorizontalCard(item: movie[index]);
                   },

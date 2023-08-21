@@ -17,7 +17,7 @@ class PreLoadVerticalCard extends StatelessWidget {
           Stack(
             children: [
               Container(
-                height: height * 0.4,
+                height: width * 0.64,
                 width: width,
                 decoration: BoxDecoration(
                   color: Pallete.preLoad,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movies_app/format_date.dart';
+import 'package:movies_app/formatting.dart';
 import 'package:movies_app/models/movies_series.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
@@ -31,8 +31,8 @@ class CustomSeasons extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               final season = item.seasons![index];
 
-              String date =
-                  formatDate(season.airDate.toString().substring(0, 10));
+              String date = Formating.formatDate(
+                  season.airDate.toString().substring(0, 10));
               return Container(
                 height: 300.0,
                 margin: const EdgeInsets.only(right: 20),
