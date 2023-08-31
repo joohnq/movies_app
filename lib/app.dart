@@ -2,14 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/icon_park_outline.dart';
 import 'package:iconify_flutter/icons/icon_park_solid.dart';
-import 'package:movies_app/models/movies_series.dart';
-import 'package:movies_app/service/api_service.dart';
+import 'package:movies_app/controller/movie_controller.dart';
 import 'package:movies_app/style/colors.dart';
-import 'package:movies_app/views/favourites.dart';
 import 'package:movies_app/views/home.dart';
-import 'package:movies_app/views/search.dart';
-
-MovieService movieService = MovieService();
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -19,26 +14,35 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  late Future<List<Result>> trending;
-  late Future<List<Result>> shortly;
   int selectedIndex = 0;
+  final _controller = MovieController();
+  int lastPage = 1;
 
   @override
   void initState() {
     super.initState();
-    trending = MovieService.trending(1).then((value) => value.results);
-    shortly = MovieService.shortly().then((value) => value.results);
+    _initialize();
+  }
+
+  _initialize() async {
+    setState(() {
+      _controller.loading = true;
+    });
+
+    await _controller.fetchPopularMovies(page: lastPage);
+
+    setState(() {
+      _controller.loading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> screens = [
       Home(
-        trending: trending,
-        shortly: shortly,
+        controller: _controller,
       ),
-      const Search(),
-      const Favourites(),
+      // const Search(),
     ];
 
     return Scaffold(
@@ -90,19 +94,6 @@ class _AppState extends State<App> {
               ),
               icon: Iconify(
                 IconParkOutline.search,
-                color: Pallete.grayLight,
-                size: 28,
-              ),
-            ),
-            BottomNavigationBarItem(
-              label: "Bookmark",
-              activeIcon: Iconify(
-                IconParkSolid.bookmark,
-                color: Pallete.white,
-                size: 28,
-              ),
-              icon: Iconify(
-                IconParkOutline.bookmark,
                 color: Pallete.grayLight,
                 size: 28,
               ),

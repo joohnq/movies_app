@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:movies_app/models/movies_series.dart';
+import 'package:movies_app/models/backdrop.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/widgets/future_prompt.dart';
 import 'package:movies_app/widgets/pre_load_carousel_slider.dart';

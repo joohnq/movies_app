@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:movies_app/models/movies_series.dart';
+import 'package:movies_app/models/network.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 
 class CustomNetworks extends StatelessWidget {
-  final Result item;
+  final List<Network> networks;
   final double totalWidth;
-  const CustomNetworks({Key? key, required this.item, required this.totalWidth})
+  const CustomNetworks(
+      {Key? key, required this.networks, required this.totalWidth})
       : super(key: key);
 
   @override
@@ -26,9 +27,9 @@ class CustomNetworks extends StatelessWidget {
           height: 40.0,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: item.networks!.length,
+            itemCount: networks.length,
             itemBuilder: (BuildContext context, int index) {
-              final network = item.networks![index];
+              final network = networks[index];
               return Column(
                 children: [
                   Container(

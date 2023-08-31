@@ -64,18 +64,6 @@ class PreLoadEmphasisHome extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            right: 20,
-            top: statusBar + 10,
-            child: Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                color: Pallete.grayLight,
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          )
         ],
       ),
     );

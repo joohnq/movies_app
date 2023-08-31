@@ -1,12 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:movies_app/models/getx_atributes.dart';
-import 'package:movies_app/models/movies_series.dart';
+import 'package:movies_app/models/movie.dart';
 import 'package:movies_app/style/colors.dart';
+import 'package:movies_app/style/font.dart';
 
 class SliderCard extends StatefulWidget {
-  final Result item;
+  final MovieModel item;
 
   const SliderCard({
     super.key,
@@ -64,12 +64,6 @@ class _SliderCardState extends State<SliderCard> {
                 onTap: () {
                   Get.toNamed(
                     "/moviedetail",
-                    arguments: GetxAtributes(
-                      widget.item.id,
-                      widget.item.originalTitle == ""
-                          ? widget.item.name ?? ""
-                          : widget.item.originalTitle ?? "",
-                    ),
                   );
                 },
                 child: Container(
@@ -87,25 +81,21 @@ class _SliderCardState extends State<SliderCard> {
             },
           ),
           Positioned(
-            top: 0,
-            left: 0,
-            child: GestureDetector(
-              onTap: () {},
-              child: Container(
-                  height: 35,
-                  width: 35,
-                  decoration: const BoxDecoration(
-                    color: Pallete.yellow,
-                    borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(10),
-                      topLeft: Radius.circular(10),
-                    ),
-                  ),
-                  child: const Icon(
-                    Icons.bookmark,
-                    color: Pallete.grayDark,
-                    size: 30,
-                  )),
+            top: 10,
+            right: 10,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+              decoration: const BoxDecoration(
+                color: Pallete.yellow,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5),
+                ),
+              ),
+              child: Text(
+                widget.item.voteAverage.toStringAsFixed(1),
+                style: StyleFont.bold
+                    .copyWith(color: Pallete.grayDark, fontSize: 14),
+              ),
             ),
           ),
         ],

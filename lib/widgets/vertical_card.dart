@@ -2,12 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movies_app/models/getx_atributes.dart';
-import 'package:movies_app/models/movies_series.dart';
+import 'package:movies_app/models/movie.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 
 class VerticalCard extends StatefulWidget {
-  final Result item;
+  final MovieModel item;
 
   const VerticalCard({
     Key? key,
@@ -34,9 +34,6 @@ class _VerticalCardState extends State<VerticalCard> {
           'moviedetail',
           arguments: GetxAtributes(
             widget.item.id,
-            widget.item.originalTitle == ""
-                ? widget.item.name ?? ""
-                : widget.item.originalTitle ?? "",
           ),
         );
       },
@@ -110,17 +107,6 @@ class _VerticalCardState extends State<VerticalCard> {
                 ),
                 Positioned(
                   top: 10,
-                  right: 10,
-                  child: GestureDetector(
-                      onTap: () {},
-                      child: const Icon(
-                        Icons.bookmark,
-                        color: Pallete.white,
-                        size: 30,
-                      )),
-                ),
-                Positioned(
-                  top: 50,
                   right: 10,
                   child: Container(
                     padding:

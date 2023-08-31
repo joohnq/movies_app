@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:movies_app/models/movies_series.dart';
+import 'package:movies_app/controller/movie_controller.dart';
+// import 'package:movies_app/models/movie.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 import 'package:movies_app/widgets/carousel_slider.dart';
@@ -8,13 +9,11 @@ import 'package:movies_app/widgets/custom_title.dart';
 import 'package:movies_app/widgets/emphasis_home.dart';
 
 class Home extends StatelessWidget {
-  final Future<List<Result>> trending;
-  final Future<List<Result>> shortly;
+  final MovieController controller;
 
   const Home({
     super.key,
-    required this.trending,
-    required this.shortly,
+    required this.controller,
   });
 
   @override
@@ -22,55 +21,37 @@ class Home extends StatelessWidget {
     return Container(
       color: Pallete.grayDark,
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            EmphasisHome(
-              item: trending,
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: controller.loading
+            ? const CircularProgressIndicator()
+            : Column(
                 children: [
-                  const CustomTitle(text: "Filmes"),
-                  GestureDetector(
-                    onTap: () {
-                      Get.toNamed(
-                        '/seemore',
-                      );
-                    },
-                    child: Text(
-                      "SEE MORE",
-                      style: StyleFont.regular.copyWith(color: Pallete.yellow),
+                  EmphasisHome(
+                    item: controller.movies[0],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const CustomTitle(text: "Popular"),
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(
+                              '/seemore',
+                            );
+                          },
+                          child: Text(
+                            "SEE MORE",
+                            style: StyleFont.regular
+                                .copyWith(color: Pallete.yellow),
+                          ),
+                        )
+                      ],
                     ),
-                  )
+                  ),
+                  CarouselSlider(item: controller),
                 ],
               ),
-            ),
-            CarouselSlider(item: trending),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const CustomTitle(text: "Em Breve"),
-                  GestureDetector(
-                    onTap: () {
-                      Get.toNamed(
-                        '/seemore',
-                      );
-                    },
-                    child: Text(
-                      "SEE MORE",
-                      style: StyleFont.regular.copyWith(color: Pallete.yellow),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            CarouselSlider(item: shortly),
-          ],
-        ),
       ),
     );
   }

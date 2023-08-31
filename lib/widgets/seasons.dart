@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/formatting.dart';
-import 'package:movies_app/models/movies_series.dart';
+import 'package:movies_app/models/season.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 
 class CustomSeasons extends StatelessWidget {
-  final Result item;
+  final List<Season> seasons;
   final double totalWidth;
-  const CustomSeasons({Key? key, required this.item, required this.totalWidth})
+  const CustomSeasons(
+      {Key? key, required this.seasons, required this.totalWidth})
       : super(key: key);
 
   @override
@@ -27,9 +28,9 @@ class CustomSeasons extends StatelessWidget {
           height: 300.0,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: item.seasons!.length,
+            itemCount: seasons.length,
             itemBuilder: (BuildContext context, int index) {
-              final season = item.seasons![index];
+              final season = seasons[index];
 
               String date = Formating.formatDate(
                   season.airDate.toString().substring(0, 10));

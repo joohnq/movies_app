@@ -4,19 +4,13 @@ import 'package:get/get.dart';
 import 'package:movies_app/app.dart';
 import 'package:movies_app/views/discover.dart';
 import 'package:movies_app/views/movie_detail.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-Future initApp() async {
+Future initDotEnv() async {
   await dotenv.load(fileName: ".env");
-  final prefs = await SharedPreferences.getInstance();
-  // await prefs.clear();
-  if (prefs.getStringList('favourites') == null) {
-    await prefs.setStringList('favourites', []);
-  }
 }
 
 main() async {
-  await initApp();
+  await initDotEnv();
   runApp(
     GetMaterialApp(
       debugShowCheckedModeBanner: false,

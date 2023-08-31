@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/tabler.dart';
+import 'package:movies_app/controller/movie_controller.dart';
+// import 'package:iconify_flutter/iconify_flutter.dart';
+// import 'package:iconify_flutter/icons/tabler.dart';
 import 'package:movies_app/models/categories.dart';
-import 'package:movies_app/models/movies_series.dart';
-import 'package:movies_app/service/api_service.dart';
+import 'package:movies_app/models/movie.dart';
+// import 'package:movies_app/models/movie.dart';
+// import 'package:movies_app/models/movie_response.dart';
+// import 'package:movies_app/service/api_service.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 import 'package:movies_app/widgets/custom_title.dart';
-import 'package:movies_app/widgets/pre_load_vertical_card.dart';
 import 'package:movies_app/widgets/vertical_card.dart';
+// import 'package:movies_app/widgets/pre_load_vertical_card.dart';
+// import 'package:movies_app/widgets/vertical_card.dart';
 
 class Discover extends StatefulWidget {
   const Discover({Key? key}) : super(key: key);
@@ -19,46 +23,54 @@ class Discover extends StatefulWidget {
 }
 
 class _DiscoverState extends State<Discover> {
-  late Future<List<Result>> movies;
   int page = 1;
   int whatIsTrue = 0;
+  int lastPage = 1;
+  final _controller = MovieController();
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    movies = fetchApiTrending(1).then((value) => value.results);
+    _initialize();
+    // _initScrollListener();
   }
 
-  Future<MoviesAndSeries> fetchApiTrending(int page) async {
-    return await MovieService.trending(page);
+  _initScrollListener() async {
+    // _scrollController.addListener(() async {
+    //   if (_scrollController.offset >=
+    //       _scrollController.position.maxScrollExtent) {
+    //     if (_controller.currentPage == lastPage) {
+    //       lastPage++;
+    //       await _controller.fetchPopularMovies(page: lastPage);
+    //       setState(() {});
+    //     }
+    //   }
+    // });
+    if (_controller.currentPage == lastPage) {
+      lastPage++;
+      await _controller.fetchPopularMovies(page: lastPage);
+      setState(() {});
+    }
   }
 
-  // loadMoreMovies() async {
-  //   setState(() {
-  //     page++;
-  //   });
-  //   try {
-  //     List<Result> newMovies =
-  //         await MovieService.trending(page).then((value) => value.results);
-  //     List<Result> existingMovies = await movies;
-  //     List<Result> updatedMovies = [...existingMovies, ...newMovies];
-  //     setState(() {
-  //       movies = Future.value(updatedMovies);
-  //     });
-  //   } catch (error) {
-  //     Exception('Erro ao buscar filmes: $error');
-  //   }
-  // }
+  _initialize() async {
+    setState(() {
+      _controller.loading = true;
+    });
 
-  Future<MoviesAndSeries> searchCategory(String category) async {
-    return MovieService.searchByCategory(category);
+    await _controller.fetchPopularMovies(page: lastPage);
+
+    setState(() {
+      _controller.loading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    double statusBar = MediaQuery.of(context).padding.top;
+    // double height = MediaQuery.of(context).size.height;
+    // double statusBar = MediaQuery.of(context).padding.top;
     return Scaffold(
       backgroundColor: Pallete.grayDark,
       body: SafeArea(
@@ -132,11 +144,10 @@ class _DiscoverState extends State<Discover> {
               const SizedBox(
                 height: 20,
               ),
-              FutureBuilder<List<Result>>(
-                future: movies,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return GridView.builder(
+              _controller.loading
+                  ? const CircularProgressIndicator()
+                  : GridView.builder(
+                      controller: _scrollController,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         mainAxisSpacing: 0,
@@ -144,62 +155,20 @@ class _DiscoverState extends State<Discover> {
                         childAspectRatio: width * 0.64 / width,
                       ),
                       shrinkWrap: true,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 0),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: 6,
+                      itemCount: _controller.moviesCount,
                       itemBuilder: (context, index) {
-                        return const PreLoadVerticalCard();
+                        final List<MovieModel> movie = _controller.movies;
+                        return VerticalCard(
+                          item: movie[index],
+                        );
                       },
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text(
-                      'Ocorreu um erro: ${snapshot.error}',
-                      style: const TextStyle(color: Pallete.white),
-                    );
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return SizedBox(
-                      height: height - 200 - statusBar,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Iconify(
-                            Tabler.error_404,
-                            color: Pallete.white,
-                            size: width / 2,
-                          ),
-                          Text(
-                            'Item não encontrado',
-                            style: StyleFont.bold
-                                .copyWith(fontSize: 20, color: Pallete.white),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                  List<Result> movie = snapshot.data!.toList();
-
-                  return GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 0,
-                      crossAxisSpacing: 10,
-                      childAspectRatio: width * 0.64 / width,
                     ),
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: (movie.length / 2).ceil(),
-                    itemBuilder: (context, index) {
-                      return VerticalCard(
-                        item: movie[index],
-                      );
-                    },
-                  );
-                },
-              ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  _initScrollListener();
+                },
                 child: Container(
                   margin: const EdgeInsets.symmetric(vertical: 20),
                   width: MediaQuery.of(context).size.width * 0.4,
