@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:movies_app/formatting.dart';
-import 'package:movies_app/models/season.dart';
+import 'package:movies_app/models/season_model.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
+import 'package:movies_app/tools/formatting.dart';
 
 class CustomSeasons extends StatelessWidget {
   final List<Season> seasons;

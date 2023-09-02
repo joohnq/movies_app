@@ -1,60 +1,66 @@
-// To parse this JSON data, do
-//
-//     final movieModel = movieModelFromJson(jsonString);
-
 import 'dart:convert';
 
-MovieModel movieModelFromJson(String str) =>
-    MovieModel.fromJson(json.decode(str));
+import 'package:movies_app/models/genre_model.dart';
 
-String movieModelToJson(MovieModel data) => json.encode(data.toJson());
+MovieDetailModel movieDetailModelFromJson(String str) =>
+    MovieDetailModel.fromJson(json.decode(str));
 
-class MovieModel {
+String movieDetailModelToJson(MovieDetailModel data) =>
+    json.encode(data.toJson());
+
+class MovieDetailModel {
   // bool adult;
-  String backdropPath;
-  // BelongsToCollection belongsToCollection;
-  // int budget;
-  // List<Genre> genres;
+  // String backdropPath;
+  // dynamic belongsToCollection;
+  int budget;
+  List<Genre> genres;
+
   // String homepage;
-  int id;
+  // int id;
   // String imdbId;
-  // String originalLanguage;
+  String originalLanguage;
   String originalTitle;
   String overview;
+
   // double popularity;
   String posterPath;
+
   // List<ProductionCompany> productionCompanies;
   // List<ProductionCountry> productionCountries;
-  // DateTime releaseDate;
+  String releaseDate;
+
   // int revenue;
-  // int runtime;
+  int runtime;
+
   // List<SpokenLanguage> spokenLanguages;
   // String status;
   // String tagline;
   String title;
+
   // bool video;
   double voteAverage;
+
   // int voteCount;
 
-  MovieModel({
+  MovieDetailModel({
     // required this.adult,
-    required this.backdropPath,
+    // required this.backdropPath,
     // required this.belongsToCollection,
-    // required this.budget,
-    // required this.genres,
+    required this.budget,
+    required this.genres,
     // required this.homepage,
-    required this.id,
+    // required this.id,
     // required this.imdbId,
-    // required this.originalLanguage,
+    required this.originalLanguage,
     required this.originalTitle,
     required this.overview,
     // required this.popularity,
     required this.posterPath,
     // required this.productionCompanies,
     // required this.productionCountries,
-    // required this.releaseDate,
+    required this.releaseDate,
     // required this.revenue,
-    // required this.runtime,
+    required this.runtime,
     // required this.spokenLanguages,
     // required this.status,
     // required this.tagline,
@@ -64,19 +70,19 @@ class MovieModel {
     // required this.voteCount,
   });
 
-  factory MovieModel.fromJson(Map<dynamic, dynamic> json) => MovieModel(
+  factory MovieDetailModel.fromJson(Map<dynamic, dynamic> json) =>
+      MovieDetailModel(
         // adult: json["adult"],
-        backdropPath: json["backdrop_path"] ?? "",
-        // belongsToCollection:
-        //     BelongsToCollection.fromJson(json["belongs_to_collection"]),
-        // budget: json["budget"],
-        // genres: json["genres"] == null
-        //     ? List<Genre>.from(json["genres"].map((x) => Genre.fromJson(x)))
-        //     : <Genre>[],
+        // backdropPath: json["backdrop_path"],
+        // belongsToCollection: json["belongs_to_collection"],
+        budget: json["budget"] ?? 0,
+        genres: json["genres"] != null
+            ? List<Genre>.from(json["genres"].map((x) => Genre.fromJson(x)))
+            : <Genre>[],
         // homepage: json["homepage"],
-        id: json["id"],
+        // id: json["id"],
         // imdbId: json["imdb_id"],
-        // originalLanguage: json["original_language"],
+        originalLanguage: json["original_language"] ?? "",
         originalTitle: json["original_title"] ?? "",
         overview: json["overview"] ?? "",
         // popularity: json["popularity"]?.toDouble(),
@@ -87,33 +93,30 @@ class MovieModel {
         // productionCountries: List<ProductionCountry>.from(
         //     json["production_countries"]
         //         .map((x) => ProductionCountry.fromJson(x))),
-        // releaseDate: json["release_date"] == null
-        //     ? DateTime.parse(json["release_date"])
-        //     : DateTime(0),
+        releaseDate: json["release_date"] ?? "",
         // revenue: json["revenue"],
-        // runtime: json["runtime"],
-        // spokenLanguages: json["spoken_languages"] == null
-        //     ? List<SpokenLanguage>.from(
-        //         json["spoken_languages"].map((x) => SpokenLanguage.fromJson(x)))
-        //     : <SpokenLanguage>[],
+        runtime: json["runtime"] ?? "",
+        // spokenLanguages: List<SpokenLanguage>.from(
+        //     json["spoken_languages"].map((x) => SpokenLanguage.fromJson(x))),
         // status: json["status"],
         // tagline: json["tagline"],
         title: json["title"] ?? "",
         // video: json["video"],
         voteAverage: json["vote_average"]?.toDouble() ?? 0,
+
         // voteCount: json["vote_count"],
       );
 
   Map<dynamic, dynamic> toJson() => {
         // "adult": adult,
-        "backdrop_path": backdropPath,
-        // "belongs_to_collection": belongsToCollection.toJson(),
-        // "budget": budget,
-        // "genres": List<dynamic>.from(genres.map((x) => x.toJson())),
+        // "backdrop_path": backdropPath,
+        // "belongs_to_collection": belongsToCollection,
+        "budget": budget,
+        "genres": List<dynamic>.from(genres.map((x) => x.toJson())),
         // "homepage": homepage,
-        "id": id,
+        // "id": id,
         // "imdb_id": imdbId,
-        // "original_language": originalLanguage,
+        "original_language": originalLanguage,
         "original_title": originalTitle,
         "overview": overview,
         // "popularity": popularity,
@@ -122,10 +125,9 @@ class MovieModel {
         //     List<dynamic>.from(productionCompanies.map((x) => x.toJson())),
         // "production_countries":
         //     List<dynamic>.from(productionCountries.map((x) => x.toJson())),
-        // "release_date":
-        //     "${releaseDate.year.toString().padLeft(4, '0')}-${releaseDate.month.toString().padLeft(2, '0')}-${releaseDate.day.toString().padLeft(2, '0')}",
+        "release_date": releaseDate,
         // "revenue": revenue,
-        // "runtime": runtime,
+        "runtime": runtime,
         // "spoken_languages":
         //     List<dynamic>.from(spokenLanguages.map((x) => x.toJson())),
         // "status": status,

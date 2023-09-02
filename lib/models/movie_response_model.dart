@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:movies_app/models/movie.dart';
+import 'package:movies_app/models/movie_model.dart';
 
 MovieResponseModel movieResponseModelFromJson(String str) =>
     MovieResponseModel.fromJson(json.decode(str));

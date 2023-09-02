@@ -1,28 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:movies_app/models/getx_atributes.dart';
-import 'package:movies_app/models/movie.dart';
+import 'package:movies_app/models/getx_atributes_model.dart';
+import 'package:movies_app/models/movie_model.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 
-class VerticalCard extends StatefulWidget {
+class VerticalCard extends StatelessWidget {
   final MovieModel item;
 
   const VerticalCard({
     Key? key,
     required this.item,
   }) : super(key: key);
-
-  @override
-  State<VerticalCard> createState() => _VerticalCardState();
-}
-
-class _VerticalCardState extends State<VerticalCard> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +22,7 @@ class _VerticalCardState extends State<VerticalCard> {
       onTap: () {
         Get.toNamed(
           'moviedetail',
-          arguments: GetxAtributes(
-            widget.item.id,
-          ),
+          arguments: GetxAtributes(id: item.id),
         );
       },
       child: SizedBox(
@@ -55,7 +43,7 @@ class _VerticalCardState extends State<VerticalCard> {
                     borderRadius: BorderRadius.circular(10),
                     child: CachedNetworkImage(
                       imageUrl:
-                          "https://image.tmdb.org/t/p/w500${widget.item.posterPath}",
+                          "https://image.tmdb.org/t/p/w500${item.posterPath}",
                       placeholder: (context, url) => Container(
                         height: width * 0.64,
                         width: width,
@@ -118,7 +106,7 @@ class _VerticalCardState extends State<VerticalCard> {
                       ),
                     ),
                     child: Text(
-                      widget.item.voteAverage.toStringAsFixed(1),
+                      item.voteAverage.toStringAsFixed(1),
                       style: StyleFont.bold
                           .copyWith(color: Pallete.grayDark, fontSize: 14),
                     ),

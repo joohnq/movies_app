@@ -14,9 +14,9 @@ class Cast {
   });
 
   factory Cast.fromJson(Map<dynamic, dynamic> json) => Cast(
-        name: json["name"],
-        originalName: json["original_name"],
-        profilePath: json["profile_path"],
+        name: json["name"] ?? "",
+        originalName: json["original_name"] ?? "",
+        profilePath: json["profile_path"] ?? "",
         character: json["character"] ?? "",
         department: json["department"] ?? "",
       );

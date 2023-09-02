@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 
 class Formating {
+  Formating._();
   static String formatDate(String date) {
     if (date.isEmpty) {
       return "";

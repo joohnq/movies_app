@@ -22,7 +22,7 @@ class PreLoadCarouselSlider extends StatelessWidget {
                     height: 200,
                     width: 140,
                     decoration: BoxDecoration(
-                      color: Pallete.grayDark,
+                      color: Pallete.grayLight,
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),

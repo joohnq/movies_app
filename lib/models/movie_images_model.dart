@@ -1,4 +1,4 @@
-import 'package:movies_app/models/backdrop.dart';
+import 'package:movies_app/models/backdrop_model.dart';
 
 class MovieImagesModel {
   List<Backdrop> backdrops;

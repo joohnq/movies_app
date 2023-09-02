@@ -1,12 +1,6 @@
-// import 'package:auto_size_text/auto_size_text.dart';
-// import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:get/get.dart';
-// import 'package:movies_app/models/getx_atributes.dart';
-import 'package:movies_app/models/movie.dart';
-// import 'package:movies_app/style/colors.dart';
-// import 'package:movies_app/style/font.dart';
+import 'package:movies_app/models/movie_model.dart';
 
 class HorizontalCard extends StatefulWidget {
   final MovieModel item;

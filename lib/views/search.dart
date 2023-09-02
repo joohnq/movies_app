@@ -1,8 +1,8 @@
 // import 'package:flutter/material.dart';
 // import 'package:iconify_flutter/iconify_flutter.dart';
 // import 'package:iconify_flutter/icons/tabler.dart';
-// import 'package:movies_app/models/movie.dart';
-// import 'package:movies_app/models/movie_response.dart';
+// import 'package:movies_app/models/movie_model.dart';
+// import 'package:movies_app/models/movie_response_model.dart';
 // import 'package:movies_app/service/api_service.dart';
 // import 'package:movies_app/style/colors.dart';
 // import 'package:movies_app/style/font.dart';

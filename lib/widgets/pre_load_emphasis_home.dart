@@ -30,30 +30,18 @@ class PreLoadEmphasisHome extends StatelessWidget {
                 children: [
                   Container(
                     width: width,
-                    height: 20,
+                    height: 30,
                     constraints: const BoxConstraints(maxWidth: 300),
                     decoration: BoxDecoration(
                       color: Pallete.grayLight,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(5),
                     ),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   Container(
-                    width: width * 0.5,
-                    height: 12,
-                    constraints: const BoxConstraints(maxWidth: 200),
-                    decoration: BoxDecoration(
-                      color: Pallete.grayLight,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    width: 200,
+                    width: width * 0.25,
                     height: 30,
                     decoration: BoxDecoration(
                       color: Pallete.grayLight,
@@ -62,6 +50,25 @@ class PreLoadEmphasisHome extends StatelessWidget {
                   )
                 ],
               ),
+            ),
+          ),
+          Positioned(
+            right: 20,
+            top: statusBar + 10,
+            child: Column(
+              children: [
+                const SizedBox(height: 5),
+                Container(
+                  width: 30,
+                  height: 20,
+                  decoration: const BoxDecoration(
+                    color: Pallete.grayLight,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(5),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

@@ -2,23 +2,15 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:movies_app/models/getx_atributes.dart';
-import 'package:movies_app/models/movie.dart';
+import 'package:movies_app/models/getx_atributes_model.dart';
+import 'package:movies_app/models/movie_model.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 
-class EmphasisHome extends StatefulWidget {
-  final MovieModel item;
+class EmphasisHome extends StatelessWidget {
+  final MovieModel movie;
 
-  const EmphasisHome({super.key, required this.item});
-
-  @override
-  State<EmphasisHome> createState() => _EmphasisHomeState();
-}
-
-class _EmphasisHomeState extends State<EmphasisHome> {
-  late bool itsFavourite = false;
-  List<String> category = [];
+  const EmphasisHome({super.key, required this.movie});
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +26,13 @@ class _EmphasisHomeState extends State<EmphasisHome> {
         onTap: () {
           Get.toNamed(
             "/moviedetail",
-            arguments: GetxAtributes(widget.item.id),
+            arguments: GetxAtributes(id: movie.id),
           );
         },
         child: Stack(
           children: [
             CachedNetworkImage(
-              imageUrl:
-                  "https://image.tmdb.org/t/p/w780${widget.item.backdropPath}",
+              imageUrl: "https://image.tmdb.org/t/p/w780${movie.backdropPath}",
               placeholder: (context, url) => Container(
                 height: height,
                 width: width,
@@ -86,7 +77,7 @@ class _EmphasisHomeState extends State<EmphasisHome> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AutoSizeText(
-                      widget.item.originalTitle,
+                      movie.originalTitle,
                       style: StyleFont.bold
                           .copyWith(color: Pallete.white, fontSize: 30),
                       maxLines: 2,
@@ -142,7 +133,7 @@ class _EmphasisHomeState extends State<EmphasisHome> {
                       ),
                     ),
                     child: Text(
-                      widget.item.voteAverage.toStringAsFixed(1),
+                      movie.voteAverage.toStringAsFixed(1),
                       style: StyleFont.bold
                           .copyWith(color: Pallete.grayDark, fontSize: 14),
                     ),
