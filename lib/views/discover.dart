@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movies_app/controller/movie_controller.dart';
+import 'package:movies_app/controller/movies_popular_controller.dart';
 import 'package:movies_app/models/movie_model.dart';
 // import 'package:movies_app/models/movie_model.dart';
 // import 'package:movies_app/models/movie_response_model.dart';
@@ -20,7 +20,7 @@ class _DiscoverState extends State<Discover> {
   int page = 1;
   int whatIsTrue = 0;
   int lastPage = 1;
-  final _controller = MovieController();
+  final _controller = MoviesPopularController();
   final _scrollController = ScrollController();
 
   @override

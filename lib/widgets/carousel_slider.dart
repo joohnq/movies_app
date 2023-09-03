@@ -1,14 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:movies_app/controller/movie_controller.dart';
 import 'package:movies_app/models/getx_atributes_model.dart';
 import 'package:movies_app/models/movie_model.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 
-class CarouselSlider extends StatefulWidget {
-  final MovieController item;
+class CarouselSlider<T> extends StatefulWidget {
+  final T item;
 
   const CarouselSlider({super.key, required this.item});
 
@@ -21,20 +20,18 @@ class _CarouselSliderState extends State<CarouselSlider> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 200,
-      child: widget.item.moviesCount == 0
-          ? const Text("Vazio")
-          : ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: widget.item.moviesCount,
-              itemBuilder: (BuildContext context, int index) {
-                final List<MovieModel> value = widget.item.movies;
-                return SizedBox(
-                  width: 140,
-                  height: 200,
-                  child: _buildSliderCard(value[index]),
-                );
-              },
-            ),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: widget.item.moviesCount,
+        itemBuilder: (BuildContext context, int index) {
+          final List<MovieModel> value = widget.item.movies;
+          return SizedBox(
+            width: 140,
+            height: 200,
+            child: _buildSliderCard(value[index]),
+          );
+        },
+      ),
     );
   }
 

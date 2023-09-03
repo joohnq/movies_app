@@ -11,12 +11,12 @@ import 'package:movies_app/widgets/emphasis_home.dart';
 import 'package:movies_app/widgets/pre_load_carousel_slider.dart';
 import 'package:movies_app/widgets/pre_load_emphasis_home.dart';
 
-class Home extends StatelessWidget {
+class Series extends StatelessWidget {
   final MoviesTrendingController controllerTrending;
   final MoviesPopularController controllerPopular;
   final EmphasisController controllerEmphasis;
 
-  const Home({
+  const Series({
     super.key,
     required this.controllerPopular,
     required this.controllerTrending,

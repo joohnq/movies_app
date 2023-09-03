@@ -2,15 +2,15 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:movies_app/controller/emphasis_controller.dart';
 import 'package:movies_app/models/getx_atributes_model.dart';
-import 'package:movies_app/models/movie_model.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 
 class EmphasisHome extends StatelessWidget {
-  final MovieModel movie;
+  final EmphasisController controller;
 
-  const EmphasisHome({super.key, required this.movie});
+  const EmphasisHome({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +26,14 @@ class EmphasisHome extends StatelessWidget {
         onTap: () {
           Get.toNamed(
             "/moviedetail",
-            arguments: GetxAtributes(id: movie.id),
+            arguments: GetxAtributes(id: controller.id),
           );
         },
         child: Stack(
           children: [
             CachedNetworkImage(
-              imageUrl: "https://image.tmdb.org/t/p/w780${movie.backdropPath}",
+              imageUrl:
+                  "https://image.tmdb.org/t/p/w780${controller.backdropPath}",
               placeholder: (context, url) => Container(
                 height: height,
                 width: width,
@@ -77,7 +78,7 @@ class EmphasisHome extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AutoSizeText(
-                      movie.originalTitle,
+                      controller.originalTitle,
                       style: StyleFont.bold
                           .copyWith(color: Pallete.white, fontSize: 30),
                       maxLines: 2,
@@ -133,7 +134,7 @@ class EmphasisHome extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      movie.voteAverage.toStringAsFixed(1),
+                      controller.voteAverage.toStringAsFixed(1),
                       style: StyleFont.bold
                           .copyWith(color: Pallete.grayDark, fontSize: 14),
                     ),

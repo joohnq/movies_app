@@ -5,6 +5,7 @@ import 'package:movies_app/errors/movie_error.dart';
 import 'package:movies_app/models/movie_credits_model.dart';
 import 'package:movies_app/models/movie_detail_model.dart';
 import 'package:movies_app/models/movie_images_model.dart';
+import 'package:movies_app/models/movie_model.dart';
 import 'package:movies_app/models/movie_response_model.dart';
 
 class MovieRepository {
@@ -16,6 +17,47 @@ class MovieRepository {
       final response = await _dio.get('/movie/popular?page=$page');
       final model = MovieResponseModel.fromJson(response.data);
       return Right(model);
+    } catch (error) {
+      if (error != null) {
+        return Left(
+          MovieRepositoryError(
+            error.toString(),
+          ),
+        );
+      } else {
+        return Left(
+          MovieRepositoryError(kServerError),
+        );
+      }
+    }
+  }
+
+  Future<Either<MovieError, MovieResponseModel>> fetchTrendingMovies(
+      int page) async {
+    try {
+      final response = await _dio.get('/trending/movie/day?page=$page');
+      final model = MovieResponseModel.fromJson(response.data);
+      return Right(model);
+    } catch (error) {
+      if (error != null) {
+        return Left(
+          MovieRepositoryError(
+            error.toString(),
+          ),
+        );
+      } else {
+        return Left(
+          MovieRepositoryError(kServerError),
+        );
+      }
+    }
+  }
+
+  Future<Either<MovieError, MovieModel>> fetchEmphasis(int page) async {
+    try {
+      final response = await _dio.get('/movie/popular?page=$page');
+      final model = MovieResponseModel.fromJson(response.data);
+      return Right(model.results[0]);
     } catch (error) {
       if (error != null) {
         return Left(
