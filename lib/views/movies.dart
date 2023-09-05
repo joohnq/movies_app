@@ -1,6 +1,8 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:movies_app/controller/emphasis_controller.dart';
+import 'package:movies_app/controller/movies_emphasis_controller.dart';
 import 'package:movies_app/controller/movies_popular_controller.dart';
 import 'package:movies_app/controller/movies_trending_controller.dart';
 import 'package:movies_app/style/colors.dart';
@@ -14,7 +16,7 @@ import 'package:movies_app/widgets/pre_load_emphasis_home.dart';
 class Home extends StatelessWidget {
   final MoviesTrendingController controllerTrending;
   final MoviesPopularController controllerPopular;
-  final EmphasisController controllerEmphasis;
+  final MovieEmphasisController controllerEmphasis;
 
   const Home({
     super.key,
@@ -30,10 +32,14 @@ class Home extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            controllerEmphasis.loading
+            controllerEmphasis.moviesEmphasisLoading
                 ? const PreLoadEmphasisHome()
                 : EmphasisHome(
-                    controller: controllerEmphasis,
+                    id: controllerEmphasis.id,
+                    backdropPath: controllerEmphasis.backdropPath,
+                    originalTitle: controllerEmphasis.originalTitle,
+                    title: controllerEmphasis.title,
+                    voteAverage: controllerEmphasis.voteAverage,
                   ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
@@ -58,7 +64,9 @@ class Home extends StatelessWidget {
             controllerPopular.loading
                 ? const PreLoadCarouselSlider()
                 : CarouselSlider<MoviesPopularController>(
-                    item: controllerPopular),
+                    item: controllerPopular,
+                    mediaType: "movie",
+                  ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
               child: Row(
@@ -82,7 +90,9 @@ class Home extends StatelessWidget {
             controllerPopular.loading
                 ? const PreLoadCarouselSlider()
                 : CarouselSlider<MoviesTrendingController>(
-                    item: controllerTrending),
+                    item: controllerTrending,
+                    mediaType: "movie",
+                  ),
           ],
         ),
       ),

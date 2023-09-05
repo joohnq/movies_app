@@ -2,16 +2,19 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movies_app/models/getx_atributes_model.dart';
-import 'package:movies_app/models/movie_model.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 
 class VerticalCard extends StatelessWidget {
-  final MovieModel item;
+  final int id;
+  final String posterPath;
+  final double voteAverage;
 
   const VerticalCard({
     Key? key,
-    required this.item,
+    required this.id,
+    required this.posterPath,
+    required this.voteAverage,
   }) : super(key: key);
 
   @override
@@ -22,7 +25,7 @@ class VerticalCard extends StatelessWidget {
       onTap: () {
         Get.toNamed(
           'moviedetail',
-          arguments: GetxAtributes(id: item.id),
+          arguments: GetxAtributes(id: id, mediaType: ""),
         );
       },
       child: SizedBox(
@@ -42,8 +45,7 @@ class VerticalCard extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: CachedNetworkImage(
-                      imageUrl:
-                          "https://image.tmdb.org/t/p/w500${item.posterPath}",
+                      imageUrl: "https://image.tmdb.org/t/p/w500${posterPath}",
                       placeholder: (context, url) => Container(
                         height: width * 0.64,
                         width: width,
@@ -106,7 +108,7 @@ class VerticalCard extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      item.voteAverage.toStringAsFixed(1),
+                      voteAverage.toStringAsFixed(1),
                       style: StyleFont.bold
                           .copyWith(color: Pallete.grayDark, fontSize: 14),
                     ),

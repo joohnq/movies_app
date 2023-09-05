@@ -1,15 +1,20 @@
-import 'package:auto_size_text/auto_size_text.dart';
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/mdi.dart';
 import 'package:iconify_flutter/icons/ri.dart';
 import 'package:iconify_flutter/icons/tabler.dart';
-import 'package:movies_app/controller/emphasis_controller.dart';
+import 'package:movies_app/controller/movies_emphasis_controller.dart';
 import 'package:movies_app/controller/movies_popular_controller.dart';
 import 'package:movies_app/controller/movies_trending_controller.dart';
+import 'package:movies_app/controller/series_emphasis_controller.dart';
+import 'package:movies_app/controller/series_popular_controller.dart';
+import 'package:movies_app/controller/series_trending_controller.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
-import 'package:movies_app/views/home.dart';
+import 'package:movies_app/views/favourites.dart';
+import 'package:movies_app/views/movies.dart';
 import 'package:movies_app/views/search.dart';
 import 'package:movies_app/views/series.dart';
 
@@ -21,10 +26,13 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  int selectedIndex = 0;
-  final _controllerPopular = MoviesPopularController();
-  final _controllerTrending = MoviesTrendingController();
-  final _controllerEmphasis = EmphasisController();
+  int _selectedIndex = 0;
+  final _controllerMoviesPopular = MoviesPopularController();
+  final _controllerMoviesTrending = MoviesTrendingController();
+  final _controllerMoviesEmphasis = MovieEmphasisController();
+  final _controllerSeriesPopular = SeriesPopularController();
+  final _controllerSeriesTrending = SeriesTrendingController();
+  final _controllerSeriesEmphasis = SeriesEmphasisController();
   int lastPage = 1;
 
   @override
@@ -35,79 +43,57 @@ class _AppState extends State<App> {
 
   _initialize() async {
     setState(() {
-      _controllerPopular.loading = true;
-      _controllerTrending.loading = true;
-      _controllerEmphasis.loading = true;
+      _controllerMoviesPopular.loading = true;
+      _controllerMoviesTrending.movieLoading = true;
+      _controllerMoviesEmphasis.moviesEmphasisLoading = true;
+      _controllerSeriesPopular.seriesLoading = true;
+      _controllerSeriesTrending.seriesLoading = true;
+      _controllerSeriesEmphasis.seriesEmphasisLoading = true;
     });
 
-    await _controllerPopular.fetchPopularMovies(page: lastPage);
-    await _controllerTrending.fetchTrendingMovies(page: lastPage);
-    await _controllerEmphasis.fetchEmphasis(page: lastPage);
+    await _controllerMoviesPopular.fetchPopularMovies(page: lastPage);
+    await _controllerMoviesTrending.fetchTrendingMovies(page: lastPage);
+    await _controllerMoviesEmphasis.fetchEmphasis(page: lastPage);
+
+    await _controllerSeriesPopular.fetchPopularSeries(page: lastPage);
+    await _controllerSeriesTrending.fetchTrendingSeries(page: lastPage);
+    await _controllerSeriesEmphasis.fetchSeriesEmphasis(page: lastPage);
 
     setState(() {
-      _controllerPopular.loading = false;
-      _controllerTrending.loading = false;
-      _controllerEmphasis.loading = false;
+      _controllerMoviesPopular.loading = false;
+      _controllerMoviesTrending.movieLoading = false;
+      _controllerMoviesEmphasis.moviesEmphasisLoading = false;
+      _controllerSeriesPopular.seriesLoading = false;
+      _controllerSeriesTrending.seriesLoading = false;
+      _controllerSeriesEmphasis.seriesEmphasisLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     final List<Widget> screens = [
       Home(
-        controllerPopular: _controllerPopular,
-        controllerTrending: _controllerTrending,
-        controllerEmphasis: _controllerEmphasis,
+        controllerPopular: _controllerMoviesPopular,
+        controllerTrending: _controllerMoviesTrending,
+        controllerEmphasis: _controllerMoviesEmphasis,
       ),
-      const Search(),
+      Search(
+        controllerPopular: _controllerMoviesPopular,
+      ),
       Series(
-        controllerPopular: _controllerPopular,
-        controllerTrending: _controllerTrending,
-        controllerEmphasis: _controllerEmphasis,
+        controllerPopular: _controllerSeriesPopular,
+        controllerTrending: _controllerSeriesTrending,
+        controllerEmphasis: _controllerSeriesEmphasis,
       ),
-      const Search(),
+      const Favourites(),
     ];
 
     return Scaffold(
       backgroundColor: Pallete.grayDark,
-      body: _controllerTrending.hasMovies ||
-              _controllerPopular.hasMovies ||
-              _controllerEmphasis.hasEmphasis
-          ? IndexedStack(
-              index: selectedIndex,
-              children: screens,
-            )
-          : Scaffold(
-              backgroundColor: Pallete.grayDark,
-              body: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Iconify(
-                      Tabler.error_404,
-                      size: width * 0.5,
-                      color: Pallete.white,
-                    ),
-                    AutoSizeText(
-                      'Erro ao conectar-se com o servidor',
-                      maxLines: 2,
-                      maxFontSize: 24,
-                      minFontSize: 18,
-                      style: StyleFont.bold.copyWith(color: Pallete.white),
-                    ),
-                    AutoSizeText(
-                      'Tente novamente mais tarde!',
-                      maxLines: 2,
-                      maxFontSize: 24,
-                      minFontSize: 18,
-                      style: StyleFont.bold.copyWith(color: Pallete.white),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: screens,
+      ),
       bottomNavigationBar: Theme(
         data: ThemeData(
           splashColor: Colors.transparent,
@@ -116,7 +102,7 @@ class _AppState extends State<App> {
           splashFactory: InkSplash.splashFactory,
         ),
         child: BottomNavigationBar(
-          currentIndex: selectedIndex,
+          currentIndex: _selectedIndex,
           enableFeedback: true,
           backgroundColor: Pallete.grayDark,
           type: BottomNavigationBarType.fixed,
@@ -127,7 +113,7 @@ class _AppState extends State<App> {
           elevation: 0,
           onTap: (int index) {
             setState(() {
-              selectedIndex = index;
+              _selectedIndex = index;
             });
           },
           items: const [

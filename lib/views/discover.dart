@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/controller/movies_popular_controller.dart';
-import 'package:movies_app/models/movie_model.dart';
-// import 'package:movies_app/models/movie_model.dart';
-// import 'package:movies_app/models/movie_response_model.dart';
+import 'package:movies_app/models/movie_and_serie_model.dart';
+// import 'package:movies_app/models/movie_and_serie_model.dart';
+// import 'package:movies_app/models/movie_and_serie_response_model.dart';
 // import 'package:movies_app/service/api_service.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/widgets/vertical_card.dart';
@@ -34,7 +34,7 @@ class _DiscoverState extends State<Discover> {
     _scrollController.addListener(() async {
       if (_scrollController.offset >=
           _scrollController.position.maxScrollExtent - 400) {
-        if (_controller.currentPage == lastPage) {
+        if (_controller.itemCurrentPage == lastPage) {
           lastPage++;
           await _controller.fetchPopularMovies(page: lastPage);
           setState(() {});
@@ -80,11 +80,13 @@ class _DiscoverState extends State<Discover> {
                 ),
                 shrinkWrap: true,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                itemCount: _controller.moviesCount,
+                itemCount: _controller.itemCount,
                 itemBuilder: (context, index) {
-                  final List<MovieModel> movie = _controller.movies;
+                  final MovieAndSerieModel movie = _controller.item[index];
                   return VerticalCard(
-                    item: movie[index],
+                    id: movie.id,
+                    posterPath: movie.posterPath,
+                    voteAverage: movie.voteAverage,
                   );
                 },
               ),
