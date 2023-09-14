@@ -25,6 +25,8 @@ class MovieEmphasisController extends BaseEmphasisController {
   @override
   String get originalTitle => movieEmphasis?.originalTitle ?? "";
   @override
+  String get overview => movieEmphasis?.overview ?? "";
+  @override
   String get title => movieEmphasis?.title ?? "";
   @override
   double get voteAverage => movieEmphasis?.voteAverage ?? 0.0;
@@ -44,6 +46,7 @@ class MovieEmphasisController extends BaseEmphasisController {
             movieEmphasis?.name = movie.name,
             movieEmphasis?.originalName = movie.originalName,
             movieEmphasis?.originalTitle = movie.originalTitle,
+            movieEmphasis?.overview = movie.overview,
             movieEmphasis?.title = movie.title,
             movieEmphasis?.voteAverage = movie.voteAverage,
           }

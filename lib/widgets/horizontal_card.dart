@@ -22,6 +22,9 @@ class HorizontalCard extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width - 40;
     final voteAverage = item.voteAverage / 2;
+    final overview = item.overview.length < 100
+        ? item.overview
+        : "${item.overview.substring(0, 100)}...";
 
     return GestureDetector(
       onTap: () {
@@ -51,10 +54,10 @@ class HorizontalCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5),
                   child: CachedNetworkImage(
                     imageUrl:
-                        "https://image.tmdb.org/t/p/w780${item.backdropPath}",
+                        "https://image.tmdb.org/t/p/w780${item.posterPath}",
                     placeholder: (context, url) => Container(
-                      height: 130,
-                      width: width / 2,
+                      height: width * 0.6,
+                      width: width * 0.3,
                       decoration: const BoxDecoration(
                         color: Pallete.preLoad,
                         borderRadius: BorderRadius.all(
@@ -63,8 +66,8 @@ class HorizontalCard extends StatelessWidget {
                       ),
                     ),
                     errorWidget: (context, url, error) => Container(
-                      height: 130,
-                      width: width / 2,
+                      height: width * 0.6,
+                      width: width * 0.3,
                       decoration: const BoxDecoration(
                         color: Pallete.preLoad,
                         borderRadius: BorderRadius.all(
@@ -81,8 +84,8 @@ class HorizontalCard extends StatelessWidget {
                     ),
                     imageBuilder: (context, imageProvider) {
                       return Container(
-                        width: width / 2,
-                        height: 130,
+                        width: width * 0.4,
+                        height: width * 0.6,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                               image: imageProvider, fit: BoxFit.cover),
@@ -95,7 +98,7 @@ class HorizontalCard extends StatelessWidget {
             ),
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-              width: width / 2 - 20,
+              width: width * 0.7 - 40,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -103,7 +106,9 @@ class HorizontalCard extends StatelessWidget {
                     item.title == "" ? item.name : item.title,
                     maxLines: 3,
                     style: StyleFont.bold
-                        .copyWith(color: Pallete.white, fontSize: 16),
+                        .copyWith(color: Pallete.white, fontSize: 18),
+                    maxFontSize: 18,
+                    minFontSize: 14,
                   ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -126,6 +131,14 @@ class HorizontalCard extends StatelessWidget {
                         ),
                       )
                     ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    overview,
+                    style: StyleFont.medium
+                        .copyWith(color: Pallete.semiWhite, fontSize: 12),
                   ),
                 ],
               ),

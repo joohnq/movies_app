@@ -12,6 +12,7 @@ class EmphasisHome extends StatelessWidget {
   final String backdropPath;
   final int id;
   final String title;
+  final String overview;
   final double voteAverage;
 
   const EmphasisHome(
@@ -19,6 +20,7 @@ class EmphasisHome extends StatelessWidget {
       required this.backdropPath,
       required this.id,
       required this.title,
+      required this.overview,
       required this.voteAverage});
 
   @override
@@ -94,6 +96,17 @@ class EmphasisHome extends StatelessWidget {
                       style: StyleFont.bold
                           .copyWith(color: Pallete.white, fontSize: 30),
                       maxLines: 2,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    AutoSizeText(
+                      overview,
+                      style: StyleFont.bold
+                          .copyWith(color: Pallete.semiWhite, fontSize: 18),
+                      maxLines: 4,
+                      maxFontSize: 20,
+                      minFontSize: 12,
                     ),
                     const SizedBox(
                       height: 10,

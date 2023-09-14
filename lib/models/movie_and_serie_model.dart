@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:movies_app/models/genre_model.dart';
+
 MovieAndSerieModel movieModelFromJson(String str) =>
     MovieAndSerieModel.fromJson(json.decode(str));
 
@@ -8,21 +10,21 @@ String movieModelToJson(MovieAndSerieModel data) => json.encode(data.toJson());
 class MovieAndSerieModel {
   String backdropPath;
   int id;
+  List<Genre> genres;
   String mediaType;
   String name;
   String originalName;
   String originalTitle;
+  String overview;
   String posterPath;
   String title;
   double voteAverage;
   // bool adult;
   // BelongsToCollection belongsToCollection;
   // int budget;
-  // List<Genre> genres;
   // String homepage;
   // String imdbId;
   // String originalLanguage;
-  // String overview;
   // double popularity;
   // List<ProductionCompany> productionCompanies;
   // List<ProductionCountry> productionCountries;
@@ -38,17 +40,18 @@ class MovieAndSerieModel {
   MovieAndSerieModel({
     required this.backdropPath,
     required this.id,
+    required this.genres,
     required this.mediaType,
     required this.name,
     required this.originalName,
     required this.originalTitle,
+    required this.overview,
     required this.posterPath,
     required this.title,
     required this.voteAverage,
     // required this.adult,
     // required this.belongsToCollection,
     // required this.budget,
-    // required this.genres,
     // required this.homepage,
     // required this.imdbId,
     // required this.originalLanguage,
@@ -70,10 +73,14 @@ class MovieAndSerieModel {
       MovieAndSerieModel(
         backdropPath: json["backdrop_path"] ?? "",
         id: json["id"] ?? 0,
+        genres: json["genres"] != null
+            ? List<Genre>.from(json["genres"].map((x) => Genre.fromJson(x)))
+            : <Genre>[],
         mediaType: json["media_type"] ?? "",
         name: json["name"] ?? "",
         originalName: json["original_name"] ?? "",
         originalTitle: json["original_title"] ?? "",
+        overview: json["overview"] ?? "",
         posterPath: json["poster_path"] ?? "",
         title: json["title"] ?? "",
         voteAverage: json["vote_average"]?.toDouble() ?? 10.0,
@@ -81,9 +88,6 @@ class MovieAndSerieModel {
         // belongsToCollection:
         //     BelongsToCollection.fromJson(json["belongs_to_collection"]),
         // budget: json["budget"] ?? 0,
-        // genres: json["genres"] != null
-        //     ? List<Genre>.from(json["genres"].map((x) => Genre.fromJson(x)))
-        //     : <Genre>[],
         // homepage: json["homepage"],
         // imdbId: json["imdb_id"],
         // originalLanguage: json["original_language"] ?? "",
@@ -113,17 +117,18 @@ class MovieAndSerieModel {
   Map<dynamic, dynamic> toJson() => {
         "backdrop_path": backdropPath,
         "id": id,
+        "genres": List<dynamic>.from(genres.map((x) => x.toJson())),
         "media_type": mediaType,
         "name": name,
         "original_title": originalTitle,
         "original_name": originalName,
+        "overview": overview,
         "poster_path": posterPath,
         "title": title,
         "vote_average": voteAverage,
         // "adult": adult,
         // "belongs_to_collection": belongsToCollection.toJson(),
         // "budget": budget,
-        // "genres": List<dynamic>.from(genres.map((x) => x.toJson())),
         // "homepage": homepage,
         // "imdb_id": imdbId,
         // "original_language": originalLanguage,

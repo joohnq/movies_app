@@ -1,14 +1,15 @@
 abstract class BaseEmphasisController {
-  bool loading = false;
-  bool get hasEmphasis;
   String get backdropPath;
+  bool get hasEmphasis;
   int get id;
-  String get originalTitle;
-  String get originalName;
-  String get title;
-  String get name;
-  double get voteAverage;
+  bool loading = false;
   String get mediaType;
+  String get name;
+  String get originalName;
+  String get originalTitle;
+  String get overview;
+  String get title;
+  double get voteAverage;
 
   Future<void> fetchEmphasis({int page = 1});
 }

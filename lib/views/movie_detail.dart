@@ -288,8 +288,12 @@ class _MovieDetailState extends State<MovieDetail> {
                     SizedBox(
                       width: width - 40,
                       child: Text(
-                        _controller!.originalTitle == ""
-                            ? _controller!.title
+                        _controller!.originalTitle.isEmpty
+                            ? _controller!.originalName.isEmpty
+                                ? _controller!.title.isEmpty
+                                    ? _controller!.name
+                                    : _controller!.title
+                                : _controller!.originalName
                             : _controller!.originalTitle,
                         style: StyleFont.bold
                             .copyWith(color: Pallete.white, fontSize: 24),

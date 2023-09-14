@@ -25,6 +25,8 @@ class SeriesEmphasisController extends BaseEmphasisController {
   @override
   String get originalTitle => seriesEmphasis?.originalTitle ?? "";
   @override
+  String get overview => seriesEmphasis?.overview ?? "";
+  @override
   String get title => seriesEmphasis?.title ?? "";
 
   @override
@@ -45,6 +47,7 @@ class SeriesEmphasisController extends BaseEmphasisController {
             seriesEmphasis?.name = serie.name,
             seriesEmphasis?.originalName = serie.originalName,
             seriesEmphasis?.originalTitle = serie.originalTitle,
+            seriesEmphasis?.overview = serie.overview,
             seriesEmphasis?.title = serie.title,
             seriesEmphasis?.voteAverage = serie.voteAverage,
           }

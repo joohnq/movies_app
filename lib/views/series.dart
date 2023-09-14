@@ -70,6 +70,7 @@ class _SeriesState extends State<Series> {
                                 : _controllerEmphasis.originalName
                             : _controllerEmphasis.name
                         : _controllerEmphasis.title,
+                    overview: _controllerEmphasis.overview,
                     voteAverage: _controllerEmphasis.voteAverage,
                   ),
             Padding(

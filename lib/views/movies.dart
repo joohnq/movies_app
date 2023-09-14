@@ -61,8 +61,8 @@ class _MoviesState extends State<Movies> {
             _controllerEmphasis.loading
                 ? const PreLoadEmphasisHome()
                 : EmphasisHome(
-                    id: _controllerEmphasis.id,
                     backdropPath: _controllerEmphasis.backdropPath,
+                    id: _controllerEmphasis.id,
                     title: _controllerEmphasis.title.isEmpty
                         ? _controllerEmphasis.name.isEmpty
                             ? _controllerEmphasis.originalName.isEmpty
@@ -70,6 +70,7 @@ class _MoviesState extends State<Movies> {
                                 : _controllerEmphasis.originalName
                             : _controllerEmphasis.name
                         : _controllerEmphasis.title,
+                    overview: _controllerEmphasis.overview,
                     voteAverage: _controllerEmphasis.voteAverage,
                   ),
             Padding(
