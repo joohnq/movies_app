@@ -8,8 +8,11 @@ class Networks extends StatelessWidget {
   final List<Network> networks;
   final double width;
 
-  const Networks({Key? key, required this.networks, required this.width})
-      : super(key: key);
+  const Networks({
+    Key? key,
+    required this.networks,
+    required this.width,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +63,9 @@ class Networks extends StatelessWidget {
                           width: 100,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: imageProvider, fit: BoxFit.contain),
+                              image: imageProvider,
+                              fit: BoxFit.contain,
+                            ),
                           ),
                         );
                       },

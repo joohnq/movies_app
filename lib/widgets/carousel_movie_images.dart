@@ -5,20 +5,20 @@ import 'package:movies_app/models/backdrop_model.dart';
 import 'package:movies_app/style/colors.dart';
 
 class CarouselMovieImages<T> extends StatelessWidget {
-  final List<Backdrop> images;
-  final int current;
   final CarouselController controllerCarousel;
-  final List<Backdrop> items;
+  final int current;
+  final List<Backdrop> images;
   final int imagesCount;
+  final List<Backdrop> items;
   final Function(int) updateCurrent;
 
   const CarouselMovieImages({
     super.key,
-    required this.images,
-    required this.current,
-    required this.items,
     required this.controllerCarousel,
+    required this.current,
+    required this.images,
     required this.imagesCount,
+    required this.items,
     required this.updateCurrent,
   });
 

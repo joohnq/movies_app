@@ -324,16 +324,16 @@ class _MovieDetailState extends State<MovieDetail> {
                   ],
                 ),
               ),
-              if (_controller!.networks!.isNotEmpty)
+              if (_controller!.networks.isNotEmpty)
                 Networks(
-                  networks: _controller!.networks!,
+                  networks: _controller!.networks,
                   width: width,
                 ),
-              if (_controller!.seasons!.isNotEmpty)
+              if (_controller!.seasons.isNotEmpty)
                 Seasons(
                   width: width,
                   posterPath: _controller!.posterPath,
-                  seasons: _controller!.seasons!,
+                  seasons: _controller!.seasons,
                 )
             ],
           );

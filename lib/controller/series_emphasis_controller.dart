@@ -11,19 +11,21 @@ class SeriesEmphasisController extends BaseEmphasisController {
   MovieError? itemError;
 
   @override
-  bool get hasEmphasis => seriesEmphasis?.id == 0;
-  @override
   String get backdropPath => seriesEmphasis?.backdropPath ?? "";
+  @override
+  bool get hasEmphasis => seriesEmphasis?.id == 0;
   @override
   int get id => seriesEmphasis?.id ?? 0;
   @override
-  String get originalTitle => seriesEmphasis?.originalTitle ?? "";
-  String get originalName => seriesEmphasis?.originalName ?? "";
+  String get mediaType => "serie";
   @override
-  String get title => seriesEmphasis?.title ?? "";
   String get name => seriesEmphasis?.name ?? "";
   @override
-  String get mediaType => "serie";
+  String get originalName => seriesEmphasis?.originalName ?? "";
+  @override
+  String get originalTitle => seriesEmphasis?.originalTitle ?? "";
+  @override
+  String get title => seriesEmphasis?.title ?? "";
 
   @override
   double get voteAverage => seriesEmphasis?.voteAverage ?? 0.0;
@@ -40,9 +42,9 @@ class SeriesEmphasisController extends BaseEmphasisController {
           {
             seriesEmphasis?.backdropPath = serie.backdropPath,
             seriesEmphasis?.id = serie.id,
+            seriesEmphasis?.name = serie.name,
             seriesEmphasis?.originalName = serie.originalName,
             seriesEmphasis?.originalTitle = serie.originalTitle,
-            seriesEmphasis?.name = serie.name,
             seriesEmphasis?.title = serie.title,
             seriesEmphasis?.voteAverage = serie.voteAverage,
           }

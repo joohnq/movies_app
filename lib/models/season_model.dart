@@ -4,7 +4,7 @@ class Season {
   int id;
   String name;
   String overview;
-  dynamic posterPath;
+  String posterPath;
   int seasonNumber;
   double voteAverage;
 

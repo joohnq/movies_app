@@ -13,10 +13,11 @@ class MoviesPopularController {
 
   List<MovieAndSerieModel> get item =>
       movieResponseModel?.results ?? <MovieAndSerieModel>[];
+
   int get itemCount => item.length;
   bool get hasItem => itemCount != 0;
-  int get itemTotalPages => movieResponseModel?.totalPages ?? 1;
   int get itemCurrentPage => movieResponseModel?.page ?? 1;
+  int get itemTotalPages => movieResponseModel?.totalPages ?? 1;
   String get mediaType => "movie";
 
   Future<Either<MovieError, MovieAndSerieResponseModel>> fetchMovies(

@@ -45,8 +45,6 @@ class _SearchState extends State<Search> {
   }
 
   searchWithName(String title) async {
-    // ignore: avoid_print
-    print('exeutando');
     await _controller.fetchMoviesByName(title, page: 1);
     setState(() {});
   }

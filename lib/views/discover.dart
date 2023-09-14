@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/controller/movies_popular_controller.dart';
 import 'package:movies_app/models/movie_and_serie_model.dart';
-// import 'package:movies_app/models/movie_and_serie_model.dart';
-// import 'package:movies_app/models/movie_and_serie_response_model.dart';
-// import 'package:movies_app/service/api_service.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/widgets/vertical_card.dart';
-
-// import 'package:movies_app/widgets/pre_load_vertical_card.dart';
-// import 'package:movies_app/widgets/vertical_card.dart';
 
 class Discover extends StatefulWidget {
   const Discover({Key? key}) : super(key: key);
@@ -18,11 +12,11 @@ class Discover extends StatefulWidget {
 }
 
 class _DiscoverState extends State<Discover> {
+  final _controller = MoviesPopularController();
+  final _scrollController = ScrollController();
   int page = 1;
   int whatIsTrue = 0;
   int lastPage = 1;
-  final _controller = MoviesPopularController();
-  final _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -80,8 +74,8 @@ class _DiscoverState extends State<Discover> {
                   return VerticalCard(
                     id: movie.id,
                     posterPath: movie.posterPath,
-                    title: movie.originalTitle == ""
-                        ? movie.title == ""
+                    title: movie.originalTitle.isEmpty
+                        ? movie.title.isEmpty
                             ? movie.name
                             : movie.title
                         : movie.originalName,

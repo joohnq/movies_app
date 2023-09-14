@@ -19,7 +19,6 @@ class PreLoadMovieDetail extends StatelessWidget {
             ),
           ),
           height: totalHeight * 0.4,
-          child: Container(),
         ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

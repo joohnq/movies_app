@@ -9,15 +9,15 @@ import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 
 class EmphasisHome extends StatelessWidget {
-  final int id;
   final String backdropPath;
+  final int id;
   final String title;
   final double voteAverage;
 
   const EmphasisHome(
       {super.key,
-      required this.id,
       required this.backdropPath,
+      required this.id,
       required this.title,
       required this.voteAverage});
 

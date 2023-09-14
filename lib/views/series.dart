@@ -63,9 +63,9 @@ class _SeriesState extends State<Series> {
                 : EmphasisHome(
                     id: _controllerEmphasis.id,
                     backdropPath: _controllerEmphasis.backdropPath,
-                    title: _controllerEmphasis.title == ""
-                        ? _controllerEmphasis.name == ""
-                            ? _controllerEmphasis.originalName == ""
+                    title: _controllerEmphasis.title.isEmpty
+                        ? _controllerEmphasis.name.isEmpty
+                            ? _controllerEmphasis.originalName.isEmpty
                                 ? _controllerEmphasis.originalTitle
                                 : _controllerEmphasis.originalName
                             : _controllerEmphasis.name

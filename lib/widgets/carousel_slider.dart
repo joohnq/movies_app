@@ -10,8 +10,11 @@ class CarouselSlider<T> extends StatefulWidget {
   final T item;
   final String mediaType;
 
-  const CarouselSlider(
-      {super.key, required this.item, required this.mediaType});
+  const CarouselSlider({
+    super.key,
+    required this.item,
+    required this.mediaType,
+  });
 
   @override
   State<CarouselSlider> createState() => _CarouselSliderState();
@@ -27,6 +30,14 @@ class _CarouselSliderState extends State<CarouselSlider> {
         itemCount: widget.item.itemCount,
         itemBuilder: (BuildContext context, int index) {
           final MovieAndSerieModel value = widget.item.item[index];
+          final String title = value.title.isEmpty
+              ? value.name.isEmpty
+                  ? value.originalName.isEmpty
+                      ? value.originalTitle
+                      : value.originalName
+                  : value.name
+              : value.title;
+
           return SizedBox(
             width: 140,
             height: 200,
@@ -35,11 +46,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
               value.posterPath,
               value.id,
               value.voteAverage,
-              value.title == ""
-                  ? value.name == ""
-                      ? value.originalTitle
-                      : value.name
-                  : value.originalTitle,
+              title,
             ),
           );
         },

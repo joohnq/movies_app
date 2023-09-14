@@ -30,11 +30,13 @@ class HorizontalCard extends StatelessWidget {
           arguments: GetxAtributes(
             id: item.id,
             mediaType: item.mediaType,
-            title: item.originalTitle == ""
-                ? item.title == ""
-                    ? item.name
+            title: item.originalTitle.isEmpty
+                ? item.title.isEmpty
+                    ? item.name.isEmpty
+                        ? item.originalName
+                        : item.name
                     : item.title
-                : item.originalName,
+                : item.originalTitle,
           ),
         );
       },

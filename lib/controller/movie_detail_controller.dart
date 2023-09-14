@@ -28,7 +28,13 @@ class MovieDetailController extends BaseDetailController {
   @override
   List<Genre> get genres => movieDetail?.genres ?? <Genre>[];
   @override
+  String get mediaType => movieDetail?.mediaType ?? "";
+  @override
+  String get name => movieDetail?.name ?? "";
+  @override
   String get originalLanguage => movieDetail?.originalLanguage ?? "";
+  @override
+  String get originalName => movieDetail?.originalName ?? "";
   @override
   String get originalTitle => movieDetail?.originalTitle ?? "";
   @override
@@ -42,13 +48,8 @@ class MovieDetailController extends BaseDetailController {
   @override
   String get title => movieDetail?.title ?? "";
   @override
-  String get name => movieDetail?.name ?? "";
-  @override
-  String get originalName => movieDetail?.originalName ?? "";
-  @override
   String get voteAverage => movieDetail?.voteAverage.toStringAsFixed(1) ?? "";
-  @override
-  String get mediaType => movieDetail?.mediaType ?? "";
+
   @override
   List<Network> get networks => <Network>[];
   @override
@@ -77,16 +78,16 @@ class MovieDetailController extends BaseDetailController {
           {
             movieDetail?.budget = detail.budget,
             movieDetail?.genres = detail.genres,
+            movieDetail?.mediaType = detail.mediaType,
+            movieDetail?.name = detail.name,
             movieDetail?.originalLanguage = detail.originalLanguage,
-            movieDetail?.originalTitle = detail.originalTitle,
             movieDetail?.originalName = detail.originalName,
+            movieDetail?.originalTitle = detail.originalTitle,
             movieDetail?.overview = detail.overview,
             movieDetail?.posterPath = detail.posterPath,
             movieDetail?.releaseDate = detail.releaseDate,
             movieDetail?.title = detail.title,
-            movieDetail?.name = detail.name,
             movieDetail?.voteAverage = detail.voteAverage,
-            movieDetail?.mediaType = detail.mediaType,
           }
         else
           {

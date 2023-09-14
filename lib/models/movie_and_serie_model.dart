@@ -6,23 +6,24 @@ MovieAndSerieModel movieModelFromJson(String str) =>
 String movieModelToJson(MovieAndSerieModel data) => json.encode(data.toJson());
 
 class MovieAndSerieModel {
-  // bool adult;
   String backdropPath;
-
+  int id;
+  String mediaType;
+  String name;
+  String originalName;
+  String originalTitle;
+  String posterPath;
+  String title;
+  double voteAverage;
+  // bool adult;
   // BelongsToCollection belongsToCollection;
   // int budget;
   // List<Genre> genres;
   // String homepage;
-  int id;
-
   // String imdbId;
   // String originalLanguage;
-  String originalTitle;
-
   // String overview;
   // double popularity;
-  String posterPath;
-
   // List<ProductionCompany> productionCompanies;
   // List<ProductionCountry> productionCountries;
   // DateTime releaseDate;
@@ -31,30 +32,28 @@ class MovieAndSerieModel {
   // List<SpokenLanguage> spokenLanguages;
   // String status;
   // String tagline;
-  String mediaType;
-  String name;
-  String originalName;
-  String title;
-
   // bool video;
-  double voteAverage;
-
   // int voteCount;
 
   MovieAndSerieModel({
-    // required this.adult,
     required this.backdropPath,
+    required this.id,
+    required this.mediaType,
+    required this.name,
+    required this.originalName,
+    required this.originalTitle,
+    required this.posterPath,
+    required this.title,
+    required this.voteAverage,
+    // required this.adult,
     // required this.belongsToCollection,
     // required this.budget,
     // required this.genres,
     // required this.homepage,
-    required this.id,
     // required this.imdbId,
     // required this.originalLanguage,
-    required this.originalTitle,
     // required this.overview,
     // required this.popularity,
-    required this.posterPath,
     // required this.productionCompanies,
     // required this.productionCountries,
     // required this.releaseDate,
@@ -63,19 +62,22 @@ class MovieAndSerieModel {
     // required this.spokenLanguages,
     // required this.status,
     // required this.tagline,
-    required this.mediaType,
-    required this.name,
-    required this.originalName,
-    required this.title,
     // required this.video,
-    required this.voteAverage,
     // required this.voteCount,
   });
 
   factory MovieAndSerieModel.fromJson(Map<dynamic, dynamic> json) =>
       MovieAndSerieModel(
-        // adult: json["adult"],
         backdropPath: json["backdrop_path"] ?? "",
+        id: json["id"] ?? 0,
+        mediaType: json["media_type"] ?? "",
+        name: json["name"] ?? "",
+        originalName: json["original_name"] ?? "",
+        originalTitle: json["original_title"] ?? "",
+        posterPath: json["poster_path"] ?? "",
+        title: json["title"] ?? "",
+        voteAverage: json["vote_average"]?.toDouble() ?? 10.0,
+        // adult: json["adult"],
         // belongsToCollection:
         //     BelongsToCollection.fromJson(json["belongs_to_collection"]),
         // budget: json["budget"] ?? 0,
@@ -83,16 +85,10 @@ class MovieAndSerieModel {
         //     ? List<Genre>.from(json["genres"].map((x) => Genre.fromJson(x)))
         //     : <Genre>[],
         // homepage: json["homepage"],
-        id: json["id"] ?? 0,
-        name: json["name"] ?? "",
-        mediaType: json["media_type"] ?? "",
         // imdbId: json["imdb_id"],
         // originalLanguage: json["original_language"] ?? "",
-        originalName: json["original_name"] ?? "",
-        originalTitle: json["original_title"] ?? "",
         // overview: json["overview"] ?? "",
         // popularity: json["popularity"]?.toDouble(),
-        posterPath: json["poster_path"] ?? "",
         // productionCompanies: List<ProductionCompany>.from(
         //     json["production_companies"]
         //         .map((x) => ProductionCompany.fromJson(x))),
@@ -110,28 +106,29 @@ class MovieAndSerieModel {
         //     : <SpokenLanguage>[],
         // status: json["status"],
         // tagline: json["tagline"],
-        title: json["title"] ?? "",
         // video: json["video"],
-        voteAverage: json["vote_average"]?.toDouble() ?? 10.0,
         // voteCount: json["vote_count"],
       );
 
   Map<dynamic, dynamic> toJson() => {
-        // "adult": adult,
         "backdrop_path": backdropPath,
+        "id": id,
+        "media_type": mediaType,
+        "name": name,
+        "original_title": originalTitle,
+        "original_name": originalName,
+        "poster_path": posterPath,
+        "title": title,
+        "vote_average": voteAverage,
+        // "adult": adult,
         // "belongs_to_collection": belongsToCollection.toJson(),
         // "budget": budget,
         // "genres": List<dynamic>.from(genres.map((x) => x.toJson())),
         // "homepage": homepage,
-        "id": id,
-        "name": name,
-        "media_type": mediaType,
         // "imdb_id": imdbId,
         // "original_language": originalLanguage,
-        "original_title": originalTitle,
         // "overview": overview,
         // "popularity": popularity,
-        "poster_path": posterPath,
         // "production_companies":
         //     List<dynamic>.from(productionCompanies.map((x) => x.toJson())),
         // "production_countries":
@@ -144,9 +141,7 @@ class MovieAndSerieModel {
         //     List<dynamic>.from(spokenLanguages.map((x) => x.toJson())),
         // "status": status,
         // "tagline": tagline,
-        "title": title,
         // "video": video,
-        "vote_average": voteAverage,
         // "vote_count": voteCount,
       };
 }

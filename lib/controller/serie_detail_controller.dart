@@ -28,11 +28,17 @@ class SerieDetailController extends BaseDetailController {
   @override
   List<Genre> get genres => serieDetail?.genres ?? <Genre>[];
   @override
+  String get mediaType => "serie";
+  @override
+  String get name => serieDetail?.name ?? "";
+  @override
+  List<Network> get networks => serieDetail?.networks ?? <Network>[];
+  @override
   String get originalLanguage => serieDetail?.originalLanguage ?? "";
   @override
-  String get originalTitle => serieDetail?.originalTitle ?? "";
-  @override
   String get originalName => serieDetail?.originalName ?? "";
+  @override
+  String get originalTitle => serieDetail?.originalTitle ?? "";
   @override
   String get overview => serieDetail?.overview ?? "";
   @override
@@ -42,17 +48,11 @@ class SerieDetailController extends BaseDetailController {
   @override
   int get runtime => serieDetail?.runtime ?? 0;
   @override
-  String get title => serieDetail?.title ?? "";
-  @override
-  String get name => serieDetail?.name ?? "";
-  @override
-  String get voteAverage => serieDetail?.voteAverage.toStringAsFixed(1) ?? "";
-  @override
-  List<Network> get networks => serieDetail?.networks ?? <Network>[];
-  @override
   List<Season> get seasons => serieDetail?.seasons ?? <Season>[];
   @override
-  String get mediaType => "serie";
+  String get title => serieDetail?.title ?? "";
+  @override
+  String get voteAverage => serieDetail?.voteAverage.toStringAsFixed(1) ?? "";
 
   @override
   List<Backdrop> get images =>
@@ -77,17 +77,17 @@ class SerieDetailController extends BaseDetailController {
           {
             serieDetail?.budget = detail.budget,
             serieDetail?.genres = detail.genres,
-            serieDetail?.originalLanguage = detail.originalLanguage,
+            serieDetail?.name = detail.name,
+            serieDetail?.networks = detail.networks,
             serieDetail?.originalName = detail.originalName,
+            serieDetail?.originalLanguage = detail.originalLanguage,
             serieDetail?.originalTitle = detail.originalTitle,
             serieDetail?.overview = detail.overview,
             serieDetail?.posterPath = detail.posterPath,
             serieDetail?.releaseDate = detail.releaseDate,
-            serieDetail?.name = detail.name,
+            serieDetail?.seasons = detail.seasons,
             serieDetail?.title = detail.title,
             serieDetail?.voteAverage = detail.voteAverage,
-            serieDetail?.networks = detail.networks,
-            serieDetail?.seasons = detail.seasons,
           }
         else
           {

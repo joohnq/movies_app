@@ -6,14 +6,14 @@ import 'package:movies_app/style/font.dart';
 import 'package:movies_app/tools/formatting.dart';
 
 class Seasons extends StatelessWidget {
-  final List<Season> seasons;
   final String posterPath;
+  final List<Season> seasons;
   final double width;
 
   const Seasons({
     Key? key,
-    required this.seasons,
     required this.posterPath,
+    required this.seasons,
     required this.width,
   }) : super(key: key);
 

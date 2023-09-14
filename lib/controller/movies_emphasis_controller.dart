@@ -11,23 +11,23 @@ class MovieEmphasisController extends BaseEmphasisController {
   MovieError? itemError;
 
   @override
-  bool get hasEmphasis => movieEmphasis?.id == 0;
-  @override
   String get backdropPath => movieEmphasis?.backdropPath ?? "";
+  @override
+  bool get hasEmphasis => movieEmphasis?.id == 0;
   @override
   int get id => movieEmphasis?.id ?? 0;
   @override
-  String get originalTitle => movieEmphasis?.originalTitle ?? "";
-  @override
-  String get originalName => movieEmphasis?.originalName ?? "";
-  @override
-  String get title => movieEmphasis?.title ?? "";
+  String get mediaType => "movie";
   @override
   String get name => movieEmphasis?.name ?? "";
   @override
-  double get voteAverage => movieEmphasis?.voteAverage ?? 0.0;
+  String get originalName => movieEmphasis?.originalName ?? "";
   @override
-  String get mediaType => "movie";
+  String get originalTitle => movieEmphasis?.originalTitle ?? "";
+  @override
+  String get title => movieEmphasis?.title ?? "";
+  @override
+  double get voteAverage => movieEmphasis?.voteAverage ?? 0.0;
 
   @override
   Future<Either<MovieError, MovieAndSerieModel>> fetchEmphasis(
@@ -41,10 +41,10 @@ class MovieEmphasisController extends BaseEmphasisController {
           {
             movieEmphasis?.backdropPath = movie.backdropPath,
             movieEmphasis?.id = movie.id,
-            movieEmphasis?.originalTitle = movie.originalTitle,
-            movieEmphasis?.originalName = movie.originalName,
-            movieEmphasis?.title = movie.title,
             movieEmphasis?.name = movie.name,
+            movieEmphasis?.originalName = movie.originalName,
+            movieEmphasis?.originalTitle = movie.originalTitle,
+            movieEmphasis?.title = movie.title,
             movieEmphasis?.voteAverage = movie.voteAverage,
           }
         else
