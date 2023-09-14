@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:movies_app/models/genre_model.dart';
+import 'package:movies_app/models/network_model.dart';
+import 'package:movies_app/models/season_model.dart';
 
 MovieAndSerieDetailModel movieDetailModelFromJson(String str) =>
     MovieAndSerieDetailModel.fromJson(json.decode(str));
@@ -20,6 +22,8 @@ class MovieAndSerieDetailModel {
   // String imdbId;
   String originalLanguage;
   String originalTitle;
+  String originalName;
+  String mediaType;
   String overview;
 
   // double popularity;
@@ -36,6 +40,9 @@ class MovieAndSerieDetailModel {
   // String status;
   // String tagline;
   String title;
+  String name;
+  List<Network> networks;
+  List<Season> seasons;
 
   // bool video;
   double voteAverage;
@@ -48,11 +55,13 @@ class MovieAndSerieDetailModel {
     // required this.belongsToCollection,
     required this.budget,
     required this.genres,
+    required this.mediaType,
     // required this.homepage,
     // required this.id,
     // required this.imdbId,
     required this.originalLanguage,
     required this.originalTitle,
+    required this.originalName,
     required this.overview,
     // required this.popularity,
     required this.posterPath,
@@ -65,6 +74,9 @@ class MovieAndSerieDetailModel {
     // required this.status,
     // required this.tagline,
     required this.title,
+    required this.name,
+    required this.networks,
+    required this.seasons,
     // required this.video,
     required this.voteAverage,
     // required this.voteCount,
@@ -83,7 +95,9 @@ class MovieAndSerieDetailModel {
         // id: json["id"],
         // imdbId: json["imdb_id"],
         originalLanguage: json["original_language"] ?? "",
+        mediaType: json["media_type"] ?? "",
         originalTitle: json["original_title"] ?? "",
+        originalName: json["original_name"] ?? "",
         overview: json["overview"] ?? "",
         // popularity: json["popularity"]?.toDouble(),
         posterPath: json["poster_path"] ?? "",
@@ -101,8 +115,16 @@ class MovieAndSerieDetailModel {
         // status: json["status"],
         // tagline: json["tagline"],
         title: json["title"] ?? "",
+        name: json["name"] ?? "",
+        networks: json["networks"] != null
+            ? List<Network>.from(
+                json["networks"].map((x) => Network.fromJson(x)))
+            : <Network>[],
+        seasons: json["seasons"] != null
+            ? List<Season>.from(json["seasons"].map((x) => Season.fromJson(x)))
+            : <Season>[],
         // video: json["video"],
-        voteAverage: json["vote_average"]?.toDouble() ?? 0,
+        voteAverage: json["vote_average"]?.toDouble() ?? 0.0,
 
         // voteCount: json["vote_count"],
       );
@@ -118,6 +140,8 @@ class MovieAndSerieDetailModel {
         // "imdb_id": imdbId,
         "original_language": originalLanguage,
         "original_title": originalTitle,
+        "media_type": mediaType,
+        "original_name": originalName,
         "overview": overview,
         // "popularity": popularity,
         "poster_path": posterPath,
@@ -133,6 +157,9 @@ class MovieAndSerieDetailModel {
         // "status": status,
         // "tagline": tagline,
         "title": title,
+        "name": name,
+        "networks": List<dynamic>.from(networks.map((x) => x.toJson())),
+        "seasons": List<dynamic>.from(seasons.map((x) => x.toJson())),
         // "video": video,
         "vote_average": voteAverage,
         // "vote_count": voteCount,

@@ -8,17 +8,21 @@ String movieModelToJson(MovieAndSerieModel data) => json.encode(data.toJson());
 class MovieAndSerieModel {
   // bool adult;
   String backdropPath;
+
   // BelongsToCollection belongsToCollection;
   // int budget;
   // List<Genre> genres;
   // String homepage;
   int id;
+
   // String imdbId;
   // String originalLanguage;
   String originalTitle;
+
   // String overview;
   // double popularity;
   String posterPath;
+
   // List<ProductionCompany> productionCompanies;
   // List<ProductionCountry> productionCountries;
   // DateTime releaseDate;
@@ -27,11 +31,14 @@ class MovieAndSerieModel {
   // List<SpokenLanguage> spokenLanguages;
   // String status;
   // String tagline;
+  String mediaType;
   String name;
   String originalName;
   String title;
+
   // bool video;
   double voteAverage;
+
   // int voteCount;
 
   MovieAndSerieModel({
@@ -56,6 +63,7 @@ class MovieAndSerieModel {
     // required this.spokenLanguages,
     // required this.status,
     // required this.tagline,
+    required this.mediaType,
     required this.name,
     required this.originalName,
     required this.title,
@@ -77,6 +85,7 @@ class MovieAndSerieModel {
         // homepage: json["homepage"],
         id: json["id"] ?? 0,
         name: json["name"] ?? "",
+        mediaType: json["media_type"] ?? "",
         // imdbId: json["imdb_id"],
         // originalLanguage: json["original_language"] ?? "",
         originalName: json["original_name"] ?? "",
@@ -115,6 +124,8 @@ class MovieAndSerieModel {
         // "genres": List<dynamic>.from(genres.map((x) => x.toJson())),
         // "homepage": homepage,
         "id": id,
+        "name": name,
+        "media_type": mediaType,
         // "imdb_id": imdbId,
         // "original_language": originalLanguage,
         "original_title": originalTitle,

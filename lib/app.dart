@@ -1,16 +1,8 @@
-// ignore_for_file: avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/mdi.dart';
 import 'package:iconify_flutter/icons/ri.dart';
 import 'package:iconify_flutter/icons/tabler.dart';
-import 'package:movies_app/controller/movies_emphasis_controller.dart';
-import 'package:movies_app/controller/movies_popular_controller.dart';
-import 'package:movies_app/controller/movies_trending_controller.dart';
-import 'package:movies_app/controller/series_emphasis_controller.dart';
-import 'package:movies_app/controller/series_popular_controller.dart';
-import 'package:movies_app/controller/series_trending_controller.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 import 'package:movies_app/views/favourites.dart';
@@ -27,64 +19,18 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   int _selectedIndex = 0;
-  final _controllerMoviesPopular = MoviesPopularController();
-  final _controllerMoviesTrending = MoviesTrendingController();
-  final _controllerMoviesEmphasis = MovieEmphasisController();
-  final _controllerSeriesPopular = SeriesPopularController();
-  final _controllerSeriesTrending = SeriesTrendingController();
-  final _controllerSeriesEmphasis = SeriesEmphasisController();
-  int lastPage = 1;
 
   @override
   void initState() {
     super.initState();
-    _initialize();
-  }
-
-  _initialize() async {
-    setState(() {
-      _controllerMoviesPopular.loading = true;
-      _controllerMoviesTrending.movieLoading = true;
-      _controllerMoviesEmphasis.moviesEmphasisLoading = true;
-      _controllerSeriesPopular.seriesLoading = true;
-      _controllerSeriesTrending.seriesLoading = true;
-      _controllerSeriesEmphasis.seriesEmphasisLoading = true;
-    });
-
-    await _controllerMoviesPopular.fetchPopularMovies(page: lastPage);
-    await _controllerMoviesTrending.fetchTrendingMovies(page: lastPage);
-    await _controllerMoviesEmphasis.fetchEmphasis(page: lastPage);
-
-    await _controllerSeriesPopular.fetchPopularSeries(page: lastPage);
-    await _controllerSeriesTrending.fetchTrendingSeries(page: lastPage);
-    await _controllerSeriesEmphasis.fetchSeriesEmphasis(page: lastPage);
-
-    setState(() {
-      _controllerMoviesPopular.loading = false;
-      _controllerMoviesTrending.movieLoading = false;
-      _controllerMoviesEmphasis.moviesEmphasisLoading = false;
-      _controllerSeriesPopular.seriesLoading = false;
-      _controllerSeriesTrending.seriesLoading = false;
-      _controllerSeriesEmphasis.seriesEmphasisLoading = false;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> screens = [
-      Home(
-        controllerPopular: _controllerMoviesPopular,
-        controllerTrending: _controllerMoviesTrending,
-        controllerEmphasis: _controllerMoviesEmphasis,
-      ),
-      Search(
-        controllerPopular: _controllerMoviesPopular,
-      ),
-      Series(
-        controllerPopular: _controllerSeriesPopular,
-        controllerTrending: _controllerSeriesTrending,
-        controllerEmphasis: _controllerSeriesEmphasis,
-      ),
+      const Movies(),
+      const Search(),
+      const Series(),
       const Favourites(),
     ];
 
@@ -103,7 +49,7 @@ class _AppState extends State<App> {
         ),
         child: BottomNavigationBar(
           currentIndex: _selectedIndex,
-          enableFeedback: true,
+          enableFeedback: false,
           backgroundColor: Pallete.grayDark,
           type: BottomNavigationBarType.fixed,
           unselectedLabelStyle: StyleFont.medium,

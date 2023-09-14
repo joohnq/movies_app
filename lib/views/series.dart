@@ -1,7 +1,6 @@
-// ignore_for_file: avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:movies_app/abstract/base_emphasis_controller.dart';
 import 'package:movies_app/controller/series_emphasis_controller.dart';
 import 'package:movies_app/controller/series_popular_controller.dart';
 import 'package:movies_app/controller/series_trending_controller.dart';
@@ -13,17 +12,44 @@ import 'package:movies_app/widgets/emphasis_home.dart';
 import 'package:movies_app/widgets/pre_load_carousel_slider.dart';
 import 'package:movies_app/widgets/pre_load_emphasis_home.dart';
 
-class Series extends StatelessWidget {
-  final SeriesTrendingController controllerTrending;
-  final SeriesPopularController controllerPopular;
-  final SeriesEmphasisController controllerEmphasis;
-
+class Series extends StatefulWidget {
   const Series({
     super.key,
-    required this.controllerPopular,
-    required this.controllerTrending,
-    required this.controllerEmphasis,
   });
+
+  @override
+  State<Series> createState() => _SeriesState();
+}
+
+class _SeriesState extends State<Series> {
+  final _controllerPopular = SeriesPopularController();
+  final _controllerTrending = SeriesTrendingController();
+  final BaseEmphasisController _controllerEmphasis = SeriesEmphasisController();
+  int lastPage = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    _initialize();
+  }
+
+  _initialize() async {
+    setState(() {
+      _controllerPopular.loading = true;
+      _controllerTrending.loading = true;
+      _controllerEmphasis.loading = true;
+    });
+
+    await _controllerPopular.fetchSeries(page: lastPage);
+    await _controllerTrending.fetchTrending(page: lastPage);
+    await _controllerEmphasis.fetchEmphasis(page: lastPage);
+
+    setState(() {
+      _controllerPopular.loading = false;
+      _controllerTrending.loading = false;
+      _controllerEmphasis.loading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +58,19 @@ class Series extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            controllerEmphasis.seriesEmphasisLoading
+            _controllerEmphasis.loading
                 ? const PreLoadEmphasisHome()
                 : EmphasisHome(
-                    id: controllerEmphasis.id,
-                    backdropPath: controllerEmphasis.backdropPath,
-                    originalTitle: controllerEmphasis.originalTitle,
-                    title: controllerEmphasis.title,
-                    voteAverage: controllerEmphasis.voteAverage,
+                    id: _controllerEmphasis.id,
+                    backdropPath: _controllerEmphasis.backdropPath,
+                    title: _controllerEmphasis.title == ""
+                        ? _controllerEmphasis.name == ""
+                            ? _controllerEmphasis.originalName == ""
+                                ? _controllerEmphasis.originalTitle
+                                : _controllerEmphasis.originalName
+                            : _controllerEmphasis.name
+                        : _controllerEmphasis.title,
+                    voteAverage: _controllerEmphasis.voteAverage,
                   ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
@@ -61,10 +92,10 @@ class Series extends StatelessWidget {
                 ],
               ),
             ),
-            controllerPopular.seriesLoading
+            _controllerPopular.loading
                 ? const PreLoadCarouselSlider()
                 : CarouselSlider<SeriesPopularController>(
-                    item: controllerPopular,
+                    item: _controllerPopular,
                     mediaType: "serie",
                   ),
             Padding(
@@ -87,10 +118,10 @@ class Series extends StatelessWidget {
                 ],
               ),
             ),
-            controllerPopular.seriesLoading
+            _controllerTrending.loading
                 ? const PreLoadCarouselSlider()
                 : CarouselSlider<SeriesTrendingController>(
-                    item: controllerTrending,
+                    item: _controllerTrending,
                     mediaType: "serie",
                   ),
           ],

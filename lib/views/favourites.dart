@@ -12,10 +12,12 @@ class Favourites extends StatelessWidget {
     return Container(
       color: Pallete.grayDark,
       child: const SingleChildScrollView(
-        child: Column(
-          children: [
-            CustomTitle(text: "Popular"),
-          ],
+        child: SafeArea(
+          child: Column(
+            children: [
+              CustomTitle(text: "Favourites"),
+            ],
+          ),
         ),
       ),
     );

@@ -12,7 +12,7 @@ class Formating {
   }
 
   static String formatCapitalize(String string) {
-    if (string == null || string.isEmpty) {
+    if (string.isEmpty) {
       return "";
     }
     return string[0].toUpperCase() + string.substring(1);

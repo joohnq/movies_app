@@ -6,6 +6,7 @@ import 'package:movies_app/models/movie_and_serie_model.dart';
 // import 'package:movies_app/service/api_service.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/widgets/vertical_card.dart';
+
 // import 'package:movies_app/widgets/pre_load_vertical_card.dart';
 // import 'package:movies_app/widgets/vertical_card.dart';
 
@@ -36,16 +37,11 @@ class _DiscoverState extends State<Discover> {
           _scrollController.position.maxScrollExtent - 400) {
         if (_controller.itemCurrentPage == lastPage) {
           lastPage++;
-          await _controller.fetchPopularMovies(page: lastPage);
+          await _controller.fetchMovies(page: lastPage);
           setState(() {});
         }
       }
     });
-    // if (_controller.currentPage == lastPage) {
-    //   lastPage++;
-    //   await _controller.fetchPopularMovies(page: lastPage);
-    //   setState(() {});
-    // }
   }
 
   _initialize() async {
@@ -53,7 +49,7 @@ class _DiscoverState extends State<Discover> {
       _controller.loading = true;
     });
 
-    await _controller.fetchPopularMovies(page: lastPage);
+    await _controller.fetchMovies(page: lastPage);
 
     setState(() {
       _controller.loading = false;
@@ -63,8 +59,6 @@ class _DiscoverState extends State<Discover> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    // double height = MediaQuery.of(context).size.height;
-    // double statusBar = MediaQuery.of(context).padding.top;
     return Scaffold(
       backgroundColor: Pallete.grayDark,
       body: SafeArea(
@@ -86,6 +80,11 @@ class _DiscoverState extends State<Discover> {
                   return VerticalCard(
                     id: movie.id,
                     posterPath: movie.posterPath,
+                    title: movie.originalTitle == ""
+                        ? movie.title == ""
+                            ? movie.name
+                            : movie.title
+                        : movie.originalName,
                     voteAverage: movie.voteAverage,
                   );
                 },

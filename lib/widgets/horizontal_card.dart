@@ -3,34 +3,39 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:get/get.dart';
+import 'package:movies_app/models/getx_atributes_model.dart';
 import 'package:movies_app/models/movie_and_serie_model.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 
-class HorizontalCard extends StatefulWidget {
+class HorizontalCard extends StatelessWidget {
   final MovieAndSerieModel item;
+  final String mediaType;
 
-  const HorizontalCard({super.key, required this.item});
-
-  @override
-  State<HorizontalCard> createState() => _HorizontalCardState();
-}
-
-class _HorizontalCardState extends State<HorizontalCard> {
-  @override
-  void initState() {
-    super.initState();
-  }
+  const HorizontalCard({
+    super.key,
+    required this.item,
+    required this.mediaType,
+  });
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width - 40;
-    final voteAverage = widget.item.voteAverage / 2;
+    final voteAverage = item.voteAverage / 2;
 
     return GestureDetector(
       onTap: () {
         Get.toNamed(
-          'moviedetail',
+          "/moviedetail",
+          arguments: GetxAtributes(
+            id: item.id,
+            mediaType: item.mediaType,
+            title: item.originalTitle == ""
+                ? item.title == ""
+                    ? item.name
+                    : item.title
+                : item.originalName,
+          ),
         );
       },
       child: Container(
@@ -44,7 +49,7 @@ class _HorizontalCardState extends State<HorizontalCard> {
                   borderRadius: BorderRadius.circular(5),
                   child: CachedNetworkImage(
                     imageUrl:
-                        "https://image.tmdb.org/t/p/w780${widget.item.backdropPath}",
+                        "https://image.tmdb.org/t/p/w780${item.backdropPath}",
                     placeholder: (context, url) => Container(
                       height: 130,
                       width: width / 2,
@@ -93,7 +98,7 @@ class _HorizontalCardState extends State<HorizontalCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AutoSizeText(
-                    widget.item.originalTitle,
+                    item.title == "" ? item.name : item.title,
                     maxLines: 3,
                     style: StyleFont.bold
                         .copyWith(color: Pallete.white, fontSize: 16),

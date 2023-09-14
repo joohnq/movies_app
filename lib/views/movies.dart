@@ -1,7 +1,6 @@
-// ignore_for_file: avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:movies_app/abstract/base_emphasis_controller.dart';
 import 'package:movies_app/controller/movies_emphasis_controller.dart';
 import 'package:movies_app/controller/movies_popular_controller.dart';
 import 'package:movies_app/controller/movies_trending_controller.dart';
@@ -13,17 +12,44 @@ import 'package:movies_app/widgets/emphasis_home.dart';
 import 'package:movies_app/widgets/pre_load_carousel_slider.dart';
 import 'package:movies_app/widgets/pre_load_emphasis_home.dart';
 
-class Home extends StatelessWidget {
-  final MoviesTrendingController controllerTrending;
-  final MoviesPopularController controllerPopular;
-  final MovieEmphasisController controllerEmphasis;
-
-  const Home({
+class Movies extends StatefulWidget {
+  const Movies({
     super.key,
-    required this.controllerPopular,
-    required this.controllerTrending,
-    required this.controllerEmphasis,
   });
+
+  @override
+  State<Movies> createState() => _MoviesState();
+}
+
+class _MoviesState extends State<Movies> {
+  final _controllerPopular = MoviesPopularController();
+  final _controllerTrending = MoviesTrendingController();
+  final BaseEmphasisController _controllerEmphasis = MovieEmphasisController();
+  int lastPage = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    _initialize();
+  }
+
+  _initialize() async {
+    setState(() {
+      _controllerPopular.loading = true;
+      _controllerTrending.loading = true;
+      _controllerEmphasis.loading = true;
+    });
+
+    await _controllerPopular.fetchMovies(page: lastPage);
+    await _controllerTrending.fetchTrending(page: lastPage);
+    await _controllerEmphasis.fetchEmphasis(page: lastPage);
+
+    setState(() {
+      _controllerPopular.loading = false;
+      _controllerTrending.loading = false;
+      _controllerEmphasis.loading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +58,19 @@ class Home extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            controllerEmphasis.moviesEmphasisLoading
+            _controllerEmphasis.loading
                 ? const PreLoadEmphasisHome()
                 : EmphasisHome(
-                    id: controllerEmphasis.id,
-                    backdropPath: controllerEmphasis.backdropPath,
-                    originalTitle: controllerEmphasis.originalTitle,
-                    title: controllerEmphasis.title,
-                    voteAverage: controllerEmphasis.voteAverage,
+                    id: _controllerEmphasis.id,
+                    backdropPath: _controllerEmphasis.backdropPath,
+                    title: _controllerEmphasis.title == ""
+                        ? _controllerEmphasis.name == ""
+                            ? _controllerEmphasis.originalName == ""
+                                ? _controllerEmphasis.originalTitle
+                                : _controllerEmphasis.originalName
+                            : _controllerEmphasis.name
+                        : _controllerEmphasis.title,
+                    voteAverage: _controllerEmphasis.voteAverage,
                   ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
@@ -61,10 +92,10 @@ class Home extends StatelessWidget {
                 ],
               ),
             ),
-            controllerPopular.loading
+            _controllerPopular.loading
                 ? const PreLoadCarouselSlider()
                 : CarouselSlider<MoviesPopularController>(
-                    item: controllerPopular,
+                    item: _controllerPopular,
                     mediaType: "movie",
                   ),
             Padding(
@@ -87,10 +118,10 @@ class Home extends StatelessWidget {
                 ],
               ),
             ),
-            controllerPopular.loading
+            _controllerTrending.loading
                 ? const PreLoadCarouselSlider()
                 : CarouselSlider<MoviesTrendingController>(
-                    item: controllerTrending,
+                    item: _controllerTrending,
                     mediaType: "movie",
                   ),
           ],

@@ -8,27 +8,55 @@ class MoviesTrendingController {
   final _repository = MovieRepository();
 
   MovieAndSerieResponseModel? movieResponseModel;
-  MovieError? movieError;
-  bool movieLoading = true;
+  MovieError? itemError;
+  bool loading = true;
 
   List<MovieAndSerieModel> get item =>
       movieResponseModel?.results ?? <MovieAndSerieModel>[];
+
   int get itemCount => item.length;
+
   bool get hasItem => itemCount != 0;
+
   int get itemTotalPages => movieResponseModel?.totalPages ?? 1;
+
   int get itemCurrentPage => movieResponseModel?.page ?? 1;
 
-  Future<Either<MovieError, MovieAndSerieResponseModel>> fetchTrendingMovies(
+  String get mediaType => "movie";
+
+  Future<Either<MovieError, MovieAndSerieResponseModel>> fetchTrending(
       {int page = 1}) async {
-    movieError = null;
-    final result = await _repository.fetchTrendingMovies(page);
+    itemError = null;
+    final result = await _repository.fetchTrending(page, "movie");
     result.fold(
-      (error) => movieError = error,
+      (error) => itemError = error,
       (movie) => {
         if (movieResponseModel != null)
           {
             movieResponseModel?.page = movie.page,
             movieResponseModel?.results.addAll(movie.results),
+          }
+        else
+          {
+            movieResponseModel = movie,
+          },
+      },
+    );
+    return result;
+  }
+
+  Future<Either<MovieError, MovieAndSerieResponseModel>> fetchMoviesByName(
+      String title,
+      {int page = 1}) async {
+    itemError = null;
+    final result = await _repository.fetchByName(page, title);
+    result.fold(
+      (error) => itemError = error,
+      (movie) => {
+        if (movieResponseModel != null)
+          {
+            movieResponseModel?.page = movie.page,
+            movieResponseModel?.results = movie.results,
           }
         else
           {

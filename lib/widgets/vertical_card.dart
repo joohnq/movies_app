@@ -8,12 +8,14 @@ import 'package:movies_app/style/font.dart';
 class VerticalCard extends StatelessWidget {
   final int id;
   final String posterPath;
+  final String title;
   final double voteAverage;
 
   const VerticalCard({
     Key? key,
     required this.id,
     required this.posterPath,
+    required this.title,
     required this.voteAverage,
   }) : super(key: key);
 
@@ -25,7 +27,7 @@ class VerticalCard extends StatelessWidget {
       onTap: () {
         Get.toNamed(
           'moviedetail',
-          arguments: GetxAtributes(id: id, mediaType: ""),
+          arguments: GetxAtributes(id: id, mediaType: "", title: title),
         );
       },
       child: SizedBox(
@@ -45,7 +47,7 @@ class VerticalCard extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: CachedNetworkImage(
-                      imageUrl: "https://image.tmdb.org/t/p/w500${posterPath}",
+                      imageUrl: "https://image.tmdb.org/t/p/w500$posterPath",
                       placeholder: (context, url) => Container(
                         height: width * 0.64,
                         width: width,

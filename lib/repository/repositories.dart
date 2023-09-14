@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:movies_app/core/api.dart';
@@ -6,20 +8,22 @@ import 'package:movies_app/models/movie_and_serie_detail_model.dart';
 import 'package:movies_app/models/movie_and_serie_model.dart';
 import 'package:movies_app/models/movie_and_serie_response_model.dart';
 import 'package:movies_app/models/movie_credits_model.dart';
-import 'package:movies_app/models/movie_detail_model.dart';
 import 'package:movies_app/models/movie_images_model.dart';
 
 class MovieRepository {
   final Dio _dio = Dio(kDioOption);
 
-  Future<Either<MovieError, MovieAndSerieResponseModel>> fetchPopularMovies(
-      int page) async {
+  Future<Either<MovieError, MovieAndSerieResponseModel>> fetchPopular(
+    int page,
+    String mediaType,
+  ) async {
     try {
-      final response = await _dio.get('/movie/popular?page=$page');
+      final response =
+          await _dio.get('/$mediaType/popular?page=$page&language=en-US');
       final model = MovieAndSerieResponseModel.fromJson(response.data);
       return Right(model);
-    } catch (error) {
-      if (error != null) {
+    } on DioException catch (error) {
+      if (error.response != null) {
         return Left(
           MovieRepositoryError(
             error.toString(),
@@ -33,14 +37,15 @@ class MovieRepository {
     }
   }
 
-  Future<Either<MovieError, MovieAndSerieResponseModel>> fetchPopularSeries(
-      int page) async {
+  Future<Either<MovieError, MovieAndSerieResponseModel>> fetchTrending(
+      int page, String mediaType) async {
     try {
-      final response = await _dio.get('/tv/popular?page=$page');
+      final response =
+          await _dio.get('/trending/$mediaType/day?page=$page&language=en-US');
       final model = MovieAndSerieResponseModel.fromJson(response.data);
       return Right(model);
-    } catch (error) {
-      if (error != null) {
+    } on DioException catch (error) {
+      if (error.response != null) {
         return Left(
           MovieRepositoryError(
             error.toString(),
@@ -54,55 +59,15 @@ class MovieRepository {
     }
   }
 
-  Future<Either<MovieError, MovieAndSerieResponseModel>> fetchTrendingMovies(
-      int page) async {
+  Future<Either<MovieError, MovieAndSerieModel>> fetchEmphasis(
+      int page, String mediaType) async {
     try {
-      final response = await _dio.get('/trending/movie/day?page=$page');
-      final model = MovieAndSerieResponseModel.fromJson(response.data);
-      return Right(model);
-    } catch (error) {
-      if (error != null) {
-        return Left(
-          MovieRepositoryError(
-            error.toString(),
-          ),
-        );
-      } else {
-        return Left(
-          MovieRepositoryError(kServerError),
-        );
-      }
-    }
-  }
-
-  Future<Either<MovieError, MovieAndSerieResponseModel>> fetchTrendingSeries(
-      int page) async {
-    try {
-      final response = await _dio.get('/trending/tv/day?page=$page');
-      final model = MovieAndSerieResponseModel.fromJson(response.data);
-      return Right(model);
-    } catch (error) {
-      if (error != null) {
-        return Left(
-          MovieRepositoryError(
-            error.toString(),
-          ),
-        );
-      } else {
-        return Left(
-          MovieRepositoryError(kServerError),
-        );
-      }
-    }
-  }
-
-  Future<Either<MovieError, MovieAndSerieModel>> fetchEmphasis(int page) async {
-    try {
-      final response = await _dio.get('/movie/popular?page=$page');
+      final response =
+          await _dio.get('/$mediaType/popular?page=$page&language=en-US');
       final model = MovieAndSerieResponseModel.fromJson(response.data);
       return Right(model.results[0]);
-    } catch (error) {
-      if (error != null) {
+    } on DioException catch (error) {
+      if (error.response != null) {
         return Left(
           MovieRepositoryError(
             error.toString(),
@@ -116,33 +81,14 @@ class MovieRepository {
     }
   }
 
-  Future<Either<MovieError, MovieAndSerieModel>> fetchSeriesEmphasis(
-      int page) async {
+  Future<Either<MovieError, MovieAndSerieResponseModel>> fetchByName(
+      int page, String title) async {
     try {
-      final response = await _dio.get('/tv/popular?page=$page');
+      final response = await _dio
+          .get('/search/multi?query=$title&include_adult=true&page=$page');
       final model = MovieAndSerieResponseModel.fromJson(response.data);
-      return Right(model.results[0]);
-    } catch (error) {
-      if (error != null) {
-        return Left(
-          MovieRepositoryError(
-            error.toString(),
-          ),
-        );
-      } else {
-        return Left(
-          MovieRepositoryError(kServerError),
-        );
-      }
-    }
-  }
-
-  Future<Either<MovieError, MovieDetailModel>> fetchMovieById(int id) async {
-    try {
-      final response = await _dio.get('/movie/$id');
-      final model = MovieDetailModel.fromJson(response.data);
       return Right(model);
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         return Left(
           MovieRepositoryError(
@@ -163,13 +109,22 @@ class MovieRepository {
     }
   }
 
-  Future<Either<MovieError, MovieAndSerieDetailModel>> fetchSerieById(
-      int id) async {
+  Future<Either<MovieError, MovieAndSerieDetailModel>> fetchById(
+      int id, String mediaType, String title) async {
     try {
-      final response = await _dio.get('/tv/$id');
+      final response = await _dio.get('/movie/$id?language=en-US');
       final model = MovieAndSerieDetailModel.fromJson(response.data);
-      return Right(model);
-    } on DioError catch (error) {
+      if (model.originalTitle == title ||
+          model.title == title ||
+          model.name == title ||
+          model.originalName == title) {
+        return Right(model);
+      } else {
+        final response = await _dio.get('/tv/$id?language=en-US');
+        final model = MovieAndSerieDetailModel.fromJson(response.data);
+        return Right(model);
+      }
+    } on DioException catch (error) {
       if (error.response != null) {
         return Left(
           MovieRepositoryError(
@@ -190,12 +145,13 @@ class MovieRepository {
     }
   }
 
-  Future<Either<MovieError, MovieImagesModel>> fetchMovieImages(int id) async {
+  Future<Either<MovieError, MovieImagesModel>> fetchImages(
+      int id, String mediaType) async {
     try {
-      final response = await _dio.get('/movie/$id/images');
+      final response = await _dio.get('/$mediaType/$id/images');
       final model = MovieImagesModel.fromJson(response.data);
       return Right(model);
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         return Left(
           MovieRepositoryError(
@@ -216,66 +172,13 @@ class MovieRepository {
     }
   }
 
-  Future<Either<MovieError, MovieImagesModel>> fetchSerieImages(int id) async {
+  Future<Either<MovieError, MovieCreditsModel>> fetchCredits(
+      int id, mediaType) async {
     try {
-      final response = await _dio.get('/tv/$id/images');
-      final model = MovieImagesModel.fromJson(response.data);
-      return Right(model);
-    } on DioError catch (error) {
-      if (error.response != null) {
-        return Left(
-          MovieRepositoryError(
-            error.response!.data['status_message'],
-          ),
-        );
-      } else {
-        return Left(
-          MovieRepositoryError(kServerError),
-        );
-      }
-    } on Exception catch (error) {
-      return Left(
-        MovieRepositoryError(
-          error.toString(),
-        ),
-      );
-    }
-  }
-
-  Future<Either<MovieError, MovieCreditsModel>> fetchMovieCredits(
-      int id) async {
-    try {
-      final response = await _dio.get('/movie/$id/credits');
+      final response = await _dio.get('/$mediaType/$id/credits?language=en-US');
       final model = MovieCreditsModel.fromJson(response.data);
       return Right(model);
-    } on DioError catch (error) {
-      if (error.response != null) {
-        return Left(
-          MovieRepositoryError(
-            error.response!.data['status_message'],
-          ),
-        );
-      } else {
-        return Left(
-          MovieRepositoryError(kServerError),
-        );
-      }
-    } on Exception catch (error) {
-      return Left(
-        MovieRepositoryError(
-          error.toString(),
-        ),
-      );
-    }
-  }
-
-  Future<Either<MovieError, MovieCreditsModel>> fetchSerieCredits(
-      int id) async {
-    try {
-      final response = await _dio.get('/tv/$id/credits');
-      final model = MovieCreditsModel.fromJson(response.data);
-      return Right(model);
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         return Left(
           MovieRepositoryError(

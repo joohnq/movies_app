@@ -35,6 +35,11 @@ class _CarouselSliderState extends State<CarouselSlider> {
               value.posterPath,
               value.id,
               value.voteAverage,
+              value.title == ""
+                  ? value.name == ""
+                      ? value.originalTitle
+                      : value.name
+                  : value.originalTitle,
             ),
           );
         },
@@ -43,12 +48,21 @@ class _CarouselSliderState extends State<CarouselSlider> {
   }
 
   _buildSliderCard(
-      String mediaType, String posterPath, int id, double voteAverage) {
+    String mediaType,
+    String posterPath,
+    int id,
+    double voteAverage,
+    String title,
+  ) {
     return GestureDetector(
       onTap: () {
         Get.toNamed(
           "/moviedetail",
-          arguments: GetxAtributes(id: id, mediaType: mediaType),
+          arguments: GetxAtributes(
+            id: id,
+            mediaType: mediaType,
+            title: title,
+          ),
         );
       },
       child: Container(

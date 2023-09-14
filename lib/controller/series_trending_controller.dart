@@ -8,8 +8,8 @@ class SeriesTrendingController {
   final _repository = MovieRepository();
 
   MovieAndSerieResponseModel? seriesResponseModel;
-  MovieError? seriesError;
-  bool seriesLoading = true;
+  MovieError? itemError;
+  bool loading = true;
 
   List<MovieAndSerieModel> get item =>
       seriesResponseModel?.results ?? <MovieAndSerieModel>[];
@@ -17,13 +17,14 @@ class SeriesTrendingController {
   bool get hasItem => itemCount != 0;
   int get itemTotalPages => seriesResponseModel?.totalPages ?? 1;
   int get itemCurrentPage => seriesResponseModel?.page ?? 1;
+  String get mediaType => "serie";
 
-  Future<Either<MovieError, MovieAndSerieResponseModel>> fetchTrendingSeries(
+  Future<Either<MovieError, MovieAndSerieResponseModel>> fetchTrending(
       {int page = 1}) async {
-    seriesError = null;
-    final result = await _repository.fetchTrendingSeries(page);
+    itemError = null;
+    final result = await _repository.fetchTrending(page, "tv");
     result.fold(
-      (error) => seriesError = error,
+      (error) => itemError = error,
       (movie) => {
         if (seriesResponseModel != null)
           {

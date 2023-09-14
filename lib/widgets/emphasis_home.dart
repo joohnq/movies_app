@@ -8,10 +8,9 @@ import 'package:movies_app/models/getx_atributes_model.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 
-class EmphasisHome<T> extends StatelessWidget {
+class EmphasisHome extends StatelessWidget {
   final int id;
   final String backdropPath;
-  final String originalTitle;
   final String title;
   final double voteAverage;
 
@@ -19,7 +18,6 @@ class EmphasisHome<T> extends StatelessWidget {
       {super.key,
       required this.id,
       required this.backdropPath,
-      required this.originalTitle,
       required this.title,
       required this.voteAverage});
 
@@ -37,7 +35,11 @@ class EmphasisHome<T> extends StatelessWidget {
         onTap: () {
           Get.toNamed(
             "/moviedetail",
-            arguments: GetxAtributes(id: id, mediaType: ""),
+            arguments: GetxAtributes(
+              id: id,
+              mediaType: "",
+              title: title,
+            ),
           );
         },
         child: Stack(
@@ -88,7 +90,7 @@ class EmphasisHome<T> extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AutoSizeText(
-                      originalTitle == "" ? title : originalTitle,
+                      title,
                       style: StyleFont.bold
                           .copyWith(color: Pallete.white, fontSize: 30),
                       maxLines: 2,

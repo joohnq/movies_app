@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:movies_app/controller/movies_popular_controller.dart';
+import 'package:movies_app/controller/movies_trending_controller.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/widgets/custom_input.dart';
 import 'package:movies_app/widgets/custom_title.dart';
 import 'package:movies_app/widgets/horizontal_card.dart';
 
 class Search extends StatefulWidget {
-  final MoviesPopularController controllerPopular;
-
   const Search({
     Key? key,
-    required this.controllerPopular,
   }) : super(key: key);
 
   @override
@@ -20,6 +17,7 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   final controller = TextEditingController();
   final FocusNode focusNode = FocusNode();
+  final _controller = MoviesTrendingController();
   int lastPage = 1;
 
   @override
@@ -30,13 +28,13 @@ class _SearchState extends State<Search> {
 
   _initialize() async {
     setState(() {
-      widget.controllerPopular.loading = true;
+      _controller.loading = true;
     });
 
-    await widget.controllerPopular.fetchPopularMovies(page: lastPage);
+    await _controller.fetchTrending(page: lastPage);
 
     setState(() {
-      widget.controllerPopular.loading = false;
+      _controller.loading = false;
     });
   }
 
@@ -46,20 +44,15 @@ class _SearchState extends State<Search> {
     super.dispose();
   }
 
-  searchWithName(String name) async {
-    // if (controller.text.isNotEmpty && controller.selection.isValid) {
-    //   String searchText = controller.text;
-    // } else {
-    //   throw Exception(
-    //       "Invalid input: The search text is empty or selection is invalid.");
-    // }
-    // focusNode.unfocus();
+  searchWithName(String title) async {
+    // ignore: avoid_print
+    print('exeutando');
+    await _controller.fetchMoviesByName(title, page: 1);
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    // double totalWidth = MediaQuery.of(context).size.width;
-    // double totalHeight = MediaQuery.of(context).size.height;
     double statusBar = MediaQuery.of(context).padding.top;
     return Container(
       color: Pallete.grayDark,
@@ -95,11 +88,13 @@ class _SearchState extends State<Search> {
               padding: const EdgeInsets.all(0),
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: widget.controllerPopular.itemCount,
+              itemCount: _controller.itemCount,
               separatorBuilder: (context, index) => const SizedBox(height: 10),
               itemBuilder: (context, index) {
                 return HorizontalCard(
-                    item: widget.controllerPopular.item[index]);
+                  item: _controller.item[index],
+                  mediaType: _controller.mediaType,
+                );
               },
             ),
           ],
