@@ -1,27 +1,41 @@
-// ignore_for_file: avoid_print
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:movies_app/controller/favourites_controller.dart';
 import 'package:movies_app/models/getx_atributes_model.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
+import 'package:provider/provider.dart';
 
-class EmphasisHome extends StatelessWidget {
+class EmphasisHome extends StatefulWidget {
   final String backdropPath;
   final int id;
-  final String title;
+  final String mediaType;
   final String overview;
+  final String title;
   final double voteAverage;
 
   const EmphasisHome(
       {super.key,
       required this.backdropPath,
       required this.id,
-      required this.title,
+      required this.mediaType,
       required this.overview,
+      required this.title,
       required this.voteAverage});
+
+  @override
+  State<EmphasisHome> createState() => _EmphasisHomeState();
+}
+
+class _EmphasisHomeState extends State<EmphasisHome> {
+  bool itsFavourite = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,16 +52,16 @@ class EmphasisHome extends StatelessWidget {
           Get.toNamed(
             "/moviedetail",
             arguments: GetxAtributes(
-              id: id,
+              id: widget.id,
               mediaType: "",
-              title: title,
+              title: widget.title,
             ),
           );
         },
         child: Stack(
           children: [
             CachedNetworkImage(
-              imageUrl: "https://image.tmdb.org/t/p/w780$backdropPath",
+              imageUrl: "https://image.tmdb.org/t/p/w780${widget.backdropPath}",
               placeholder: (context, url) => Container(
                 height: height,
                 width: width,
@@ -92,7 +106,7 @@ class EmphasisHome extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AutoSizeText(
-                      title,
+                      widget.title,
                       style: StyleFont.bold
                           .copyWith(color: Pallete.white, fontSize: 30),
                       maxLines: 2,
@@ -101,7 +115,7 @@ class EmphasisHome extends StatelessWidget {
                       height: 5,
                     ),
                     AutoSizeText(
-                      overview,
+                      widget.overview,
                       style: StyleFont.bold
                           .copyWith(color: Pallete.semiWhite, fontSize: 18),
                       maxLines: 4,
@@ -145,6 +159,44 @@ class EmphasisHome extends StatelessWidget {
             ),
             Positioned(
               right: 20,
+              top: statusBar + 50,
+              child: Column(
+                children: [
+                  Consumer<FavoritesProvider>(
+                    builder: (context, storedValue, child) {
+                      bool itsFavourite = storedValue.itsFavorite(
+                          "{id: ${widget.id}, mediaType: ${widget.mediaType}, title: ${widget.title}}");
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            itsFavourite = !itsFavourite;
+                          });
+
+                          itsFavourite
+                              ? storedValue.addToFavorites(
+                                  "{id: ${widget.id}, mediaType: ${widget.mediaType}, title: ${widget.title}}")
+                              : storedValue.removeFromFavorites(
+                                  "{id: ${widget.id}, mediaType: ${widget.mediaType}, title: ${widget.title}}");
+                        },
+                        child: itsFavourite
+                            ? const Icon(
+                                Icons.bookmark,
+                                size: 30,
+                                color: Pallete.white,
+                              )
+                            : const Icon(
+                                Icons.bookmark_border,
+                                size: 30,
+                                color: Pallete.white,
+                              ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              right: 20,
               top: statusBar + 10,
               child: Column(
                 children: [
@@ -159,7 +211,7 @@ class EmphasisHome extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      voteAverage.toStringAsFixed(1),
+                      widget.voteAverage.toStringAsFixed(1),
                       style: StyleFont.bold
                           .copyWith(color: Pallete.grayDark, fontSize: 14),
                     ),

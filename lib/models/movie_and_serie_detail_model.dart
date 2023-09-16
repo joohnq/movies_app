@@ -13,6 +13,7 @@ String movieDetailModelToJson(MovieAndSerieDetailModel data) =>
 class MovieAndSerieDetailModel {
   int budget;
   List<Genre> genres;
+  int id;
   String mediaType;
   String name;
   List<Network> networks;
@@ -30,7 +31,6 @@ class MovieAndSerieDetailModel {
   // String backdropPath;
   // dynamic belongsToCollection;
   // String homepage;
-  // int id;
   // String imdbId;
   // double popularity;
   // List<ProductionCompany> productionCompanies;
@@ -45,6 +45,7 @@ class MovieAndSerieDetailModel {
   MovieAndSerieDetailModel({
     required this.budget,
     required this.genres,
+    required this.id,
     required this.mediaType,
     required this.name,
     required this.networks,
@@ -62,7 +63,6 @@ class MovieAndSerieDetailModel {
     // required this.backdropPath,
     // required this.belongsToCollection,
     // required this.homepage,
-    // required this.id,
     // required this.imdbId,
     // required this.popularity,
     // required this.productionCompanies,
@@ -81,6 +81,7 @@ class MovieAndSerieDetailModel {
         genres: json["genres"] != null
             ? List<Genre>.from(json["genres"].map((x) => Genre.fromJson(x)))
             : <Genre>[],
+        id: json["id"] ?? 0,
         mediaType: json["media_type"] ?? "",
         name: json["name"] ?? "",
         networks: json["networks"] != null
@@ -103,7 +104,6 @@ class MovieAndSerieDetailModel {
         // backdropPath: json["backdrop_path"],
         // belongsToCollection: json["belongs_to_collection"],
         // homepage: json["homepage"],
-        // id: json["id"],
         // imdbId: json["imdb_id"],
         // popularity: json["popularity"]?.toDouble(),
         // productionCompanies: List<ProductionCompany>.from(
@@ -125,6 +125,7 @@ class MovieAndSerieDetailModel {
   Map<dynamic, dynamic> toJson() => {
         "budget": budget,
         "genres": List<dynamic>.from(genres.map((x) => x.toJson())),
+        "id": id,
         "media_type": mediaType,
         "name": name,
         "networks": List<dynamic>.from(networks.map((x) => x.toJson())),
@@ -142,7 +143,6 @@ class MovieAndSerieDetailModel {
         // "backdrop_path": backdropPath,
         // "belongs_to_collection": belongsToCollection,
         // "homepage": homepage,
-        // "id": id,
         // "imdb_id": imdbId,
         // "popularity": popularity,
         // "production_companies":

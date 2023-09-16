@@ -63,6 +63,8 @@ class _SeriesState extends State<Series> {
                 : EmphasisHome(
                     id: _controllerEmphasis.id,
                     backdropPath: _controllerEmphasis.backdropPath,
+                    mediaType: "tv",
+                    overview: _controllerEmphasis.overview,
                     title: _controllerEmphasis.title.isEmpty
                         ? _controllerEmphasis.name.isEmpty
                             ? _controllerEmphasis.originalName.isEmpty
@@ -70,7 +72,6 @@ class _SeriesState extends State<Series> {
                                 : _controllerEmphasis.originalName
                             : _controllerEmphasis.name
                         : _controllerEmphasis.title,
-                    overview: _controllerEmphasis.overview,
                     voteAverage: _controllerEmphasis.voteAverage,
                   ),
             Padding(
