@@ -73,6 +73,7 @@ class _DiscoverState extends State<Discover> {
                   final MovieAndSerieModel movie = _controller.item[index];
                   return VerticalCard(
                     id: movie.id,
+                    mediaType: movie.mediaType,
                     posterPath: movie.posterPath,
                     title: movie.originalTitle.isEmpty
                         ? movie.title.isEmpty

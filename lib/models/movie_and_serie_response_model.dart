@@ -23,11 +23,11 @@ class MovieAndSerieResponseModel {
 
   factory MovieAndSerieResponseModel.fromJson(Map<dynamic, dynamic> json) =>
       MovieAndSerieResponseModel(
-        page: json["page"],
+        page: json["page"] ?? 1,
         results: List<MovieAndSerieModel>.from(
             json["results"].map((x) => MovieAndSerieModel.fromJson(x))),
-        totalPages: json["total_pages"],
-        totalResults: json["total_results"],
+        totalPages: json["total_pages"] ?? 1,
+        totalResults: json["total_results"] ?? 1,
       );
 
   Map<dynamic, dynamic> toJson() => {

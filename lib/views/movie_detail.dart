@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movies_app/abstract/base_detail_controller.dart';
+import 'package:movies_app/controller/favourites_controller.dart';
 import 'package:movies_app/controller/movie_detail_controller.dart';
 import 'package:movies_app/controller/serie_detail_controller.dart';
 import 'package:movies_app/style/colors.dart';
@@ -13,6 +14,7 @@ import 'package:movies_app/widgets/carousel_movie_images.dart';
 import 'package:movies_app/widgets/networks.dart';
 import 'package:movies_app/widgets/pre_load_movie_detail.dart';
 import 'package:movies_app/widgets/seasons.dart';
+import 'package:provider/provider.dart';
 
 class MovieDetail extends StatefulWidget {
   const MovieDetail({Key? key}) : super(key: key);
@@ -28,6 +30,7 @@ class _MovieDetailState extends State<MovieDetail> {
   int _current = 0;
   BaseDetailController? _controller;
   late bool itsMovie;
+  bool itsFavourite = false;
 
   @override
   void initState() {
@@ -115,13 +118,59 @@ class _MovieDetailState extends State<MovieDetail> {
                                 width: 40,
                                 height: 40,
                                 decoration: BoxDecoration(
-                                    color: const Color.fromRGBO(0, 0, 0, 0.7),
-                                    borderRadius: BorderRadius.circular(40)),
+                                  color: const Color.fromRGBO(0, 0, 0, 0.7),
+                                  borderRadius: BorderRadius.circular(40),
+                                ),
                                 child: const Icon(
                                   Icons.keyboard_arrow_left_rounded,
                                   color: Pallete.white,
                                   size: 30,
                                 ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: statusBar + 10,
+                            right: 20,
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: const Color.fromRGBO(0, 0, 0, 0.7),
+                                borderRadius: BorderRadius.circular(40),
+                              ),
+                              child: Consumer<FavoritesProvider>(
+                                builder: (context, storedValue, child) {
+                                  bool itsFavourite = storedValue.itsFavorite(
+                                    '{"id": "$_id", "mediaType": "$_mediaType"}',
+                                  );
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        itsFavourite = !itsFavourite;
+                                      });
+
+                                      itsFavourite
+                                          ? storedValue.addToFavorites(
+                                              '{"id": "$_id", "mediaType": "$_mediaType"}',
+                                            )
+                                          : storedValue.removeFromFavorites(
+                                              '{"id": "$_id", "mediaType": "$_mediaType"}',
+                                            );
+                                    },
+                                    child: itsFavourite
+                                        ? const Icon(
+                                            Icons.bookmark,
+                                            size: 30,
+                                            color: Pallete.white,
+                                          )
+                                        : const Icon(
+                                            Icons.bookmark_border,
+                                            size: 30,
+                                            color: Pallete.white,
+                                          ),
+                                  );
+                                },
                               ),
                             ),
                           ),
@@ -175,37 +224,39 @@ class _MovieDetailState extends State<MovieDetail> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                margin: const EdgeInsets.only(bottom: 10),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 5, vertical: 2),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Pallete.grayLight),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(5),
+                              if (_controller!.originalLanguage.isNotEmpty)
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 10),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 5, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Pallete.grayLight),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(5),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.language,
+                                        color: Pallete.white,
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      AutoSizeText(
+                                        _controller!.originalLanguage[0]
+                                                .toUpperCase() +
+                                            _controller!.originalLanguage
+                                                .substring(1),
+                                        maxLines: 1,
+                                        style: StyleFont.medium
+                                            .copyWith(color: Pallete.white),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                child: Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.language,
-                                      color: Pallete.white,
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    AutoSizeText(
-                                      _controller!.originalLanguage[0]
-                                              .toUpperCase() +
-                                          _controller!.originalLanguage
-                                              .substring(1),
-                                      maxLines: 1,
-                                      style: StyleFont.medium
-                                          .copyWith(color: Pallete.white),
-                                    ),
-                                  ],
-                                ),
-                              ),
                               if (_controller!.releaseDate
                                   .toString()
                                   .isNotEmpty)
@@ -239,37 +290,41 @@ class _MovieDetailState extends State<MovieDetail> {
                                     ],
                                   ),
                                 ),
-                              Container(
-                                margin: const EdgeInsets.only(bottom: 10),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 5, vertical: 2),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Pallete.grayLight),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(5),
+                              if (_controller!.voteAverage.isNotEmpty)
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 10),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 5, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: Pallete.grayLight),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(5),
+                                    ),
                                   ),
-                                ),
-                                child: SizedBox(
-                                  width: 50,
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(
-                                        Icons.star_rounded,
-                                        size: 24,
-                                        color: Pallete.yellow,
-                                      ),
-                                      Text(
-                                        _controller!.voteAverage,
-                                        style: StyleFont.bold.copyWith(
-                                            color: Pallete.white, fontSize: 14),
-                                      )
-                                    ],
+                                  child: SizedBox(
+                                    width: 50,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Icon(
+                                          Icons.star_rounded,
+                                          size: 24,
+                                          color: Pallete.yellow,
+                                        ),
+                                        Text(
+                                          _controller!.voteAverage,
+                                          style: StyleFont.bold.copyWith(
+                                              color: Pallete.white,
+                                              fontSize: 14),
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              )
+                                )
                             ],
                           )
                         ],

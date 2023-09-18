@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class FavoritesProvider extends ChangeNotifier {
   List<String> _favorites = [];
+  final String _favouritesError = "";
   late SharedPreferences _prefs;
 
   FavoritesProvider() {
@@ -10,6 +11,9 @@ class FavoritesProvider extends ChangeNotifier {
   }
 
   List<String> get favorites => _favorites;
+
+  String get favoritesError => _favouritesError;
+
   int get favoritesCount => _favorites.length;
 
   Future<void> _loadFavorites() async {

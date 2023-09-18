@@ -83,7 +83,7 @@ class _SearchState extends State<Search> {
               ),
             ),
             ListView.separated(
-              padding: const EdgeInsets.all(0),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: _controller.itemCount,

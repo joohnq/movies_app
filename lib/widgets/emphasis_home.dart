@@ -8,7 +8,7 @@ import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 import 'package:provider/provider.dart';
 
-class EmphasisHome extends StatefulWidget {
+class EmphasisHome extends StatelessWidget {
   final String backdropPath;
   final int id;
   final String mediaType;
@@ -26,18 +26,6 @@ class EmphasisHome extends StatefulWidget {
       required this.voteAverage});
 
   @override
-  State<EmphasisHome> createState() => _EmphasisHomeState();
-}
-
-class _EmphasisHomeState extends State<EmphasisHome> {
-  bool itsFavourite = false;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.height;
@@ -52,16 +40,16 @@ class _EmphasisHomeState extends State<EmphasisHome> {
           Get.toNamed(
             "/moviedetail",
             arguments: GetxAtributes(
-              id: widget.id,
+              id: id,
               mediaType: "",
-              title: widget.title,
+              title: title,
             ),
           );
         },
         child: Stack(
           children: [
             CachedNetworkImage(
-              imageUrl: "https://image.tmdb.org/t/p/w780${widget.backdropPath}",
+              imageUrl: "https://image.tmdb.org/t/p/w780$backdropPath",
               placeholder: (context, url) => Container(
                 height: height,
                 width: width,
@@ -106,7 +94,7 @@ class _EmphasisHomeState extends State<EmphasisHome> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AutoSizeText(
-                      widget.title,
+                      title,
                       style: StyleFont.bold
                           .copyWith(color: Pallete.white, fontSize: 30),
                       maxLines: 2,
@@ -115,12 +103,12 @@ class _EmphasisHomeState extends State<EmphasisHome> {
                       height: 5,
                     ),
                     AutoSizeText(
-                      widget.overview,
+                      overview.length <= 120
+                          ? overview
+                          : "${overview.substring(0, 120)}...",
                       style: StyleFont.bold
-                          .copyWith(color: Pallete.semiWhite, fontSize: 18),
+                          .copyWith(color: Pallete.semiWhite, fontSize: 16),
                       maxLines: 4,
-                      maxFontSize: 20,
-                      minFontSize: 12,
                     ),
                     const SizedBox(
                       height: 10,
@@ -160,39 +148,37 @@ class _EmphasisHomeState extends State<EmphasisHome> {
             Positioned(
               right: 20,
               top: statusBar + 50,
-              child: Column(
-                children: [
-                  Consumer<FavoritesProvider>(
-                    builder: (context, storedValue, child) {
-                      bool itsFavourite = storedValue.itsFavorite(
-                          "{id: ${widget.id}, mediaType: ${widget.mediaType}, title: ${widget.title}}");
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            itsFavourite = !itsFavourite;
-                          });
+              child: Consumer<FavoritesProvider>(
+                builder: (context, storedValue, child) {
+                  bool itsFavourite =
+                      context.read<FavoritesProvider>().itsFavorite(
+                            '{"id": "$id", "mediaType": "$mediaType"}',
+                          );
+                  return GestureDetector(
+                    onTap: () {
+                      itsFavourite = !itsFavourite;
 
-                          itsFavourite
-                              ? storedValue.addToFavorites(
-                                  "{id: ${widget.id}, mediaType: ${widget.mediaType}, title: ${widget.title}}")
-                              : storedValue.removeFromFavorites(
-                                  "{id: ${widget.id}, mediaType: ${widget.mediaType}, title: ${widget.title}}");
-                        },
-                        child: itsFavourite
-                            ? const Icon(
-                                Icons.bookmark,
-                                size: 30,
-                                color: Pallete.white,
-                              )
-                            : const Icon(
-                                Icons.bookmark_border,
-                                size: 30,
-                                color: Pallete.white,
-                              ),
-                      );
+                      itsFavourite
+                          ? storedValue.addToFavorites(
+                              '{"id": "$id", "mediaType": "$mediaType"}',
+                            )
+                          : storedValue.removeFromFavorites(
+                              '{"id": "$id", "mediaType": "$mediaType"}',
+                            );
                     },
-                  ),
-                ],
+                    child: itsFavourite
+                        ? const Icon(
+                            Icons.bookmark,
+                            size: 30,
+                            color: Pallete.white,
+                          )
+                        : const Icon(
+                            Icons.bookmark_border,
+                            size: 30,
+                            color: Pallete.white,
+                          ),
+                  );
+                },
               ),
             ),
             Positioned(
@@ -211,7 +197,7 @@ class _EmphasisHomeState extends State<EmphasisHome> {
                       ),
                     ),
                     child: Text(
-                      widget.voteAverage.toStringAsFixed(1),
+                      voteAverage.toStringAsFixed(1),
                       style: StyleFont.bold
                           .copyWith(color: Pallete.grayDark, fontSize: 14),
                     ),
