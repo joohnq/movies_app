@@ -36,55 +36,58 @@ class CarouselMovieImages<T> extends StatelessWidget {
                 CarouselSlider(
                   carouselController: controllerCarousel,
                   options: CarouselOptions(
-                      height: height,
-                      viewportFraction: 1,
-                      onPageChanged: (index, reason) {
-                        updateCurrent(index);
-                      }),
-                  items: items.take(10).map((i) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return Stack(
-                          children: [
-                            SizedBox(
-                              height: height,
-                              width: width,
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    "https://image.tmdb.org/t/p/w780${i.filePath}",
-                                placeholder: (context, url) => Container(
-                                  height: height,
-                                  width: width,
-                                  decoration: const BoxDecoration(
-                                    color: Pallete.preLoad,
-                                  ),
-                                ),
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons.error),
-                                imageBuilder: (context, imageProvider) {
-                                  return Container(
-                                    width: width,
+                    height: height,
+                    viewportFraction: 1,
+                    onPageChanged: (index, reason) {
+                      updateCurrent(index);
+                    },
+                  ),
+                  items: items.take(10).map(
+                    (i) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return Stack(
+                            children: [
+                              SizedBox(
+                                height: height,
+                                width: width,
+                                child: CachedNetworkImage(
+                                  imageUrl:
+                                      "https://image.tmdb.org/t/p/w780${i.filePath}",
+                                  placeholder: (context, url) => Container(
                                     height: height,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.cover),
+                                    width: width,
+                                    decoration: const BoxDecoration(
+                                      color: Pallete.preLoad,
                                     ),
-                                  );
-                                },
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                  imageBuilder: (context, imageProvider) {
+                                    return Container(
+                                      width: width,
+                                      height: height,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                            Container(
-                              height: height,
-                              width: width,
-                              decoration: const BoxDecoration(
-                                  color: Pallete.transparent50),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  }).toList(),
+                              Container(
+                                height: height,
+                                width: width,
+                                decoration: const BoxDecoration(
+                                    color: Pallete.transparent50),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ).toList(),
                 ),
                 Positioned(
                   top: statusBar + 10,

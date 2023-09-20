@@ -30,7 +30,6 @@ class _MovieDetailState extends State<MovieDetail> {
   int _current = 0;
   BaseDetailController? _controller;
   late bool itsMovie;
-  bool itsFavourite = false;
 
   @override
   void initState() {
@@ -130,8 +129,8 @@ class _MovieDetailState extends State<MovieDetail> {
                             ),
                           ),
                           Positioned(
-                            top: statusBar + 10,
                             right: 20,
+                            top: statusBar + 10,
                             child: Container(
                               width: 40,
                               height: 40,
@@ -141,14 +140,18 @@ class _MovieDetailState extends State<MovieDetail> {
                               ),
                               child: Consumer<FavoritesProvider>(
                                 builder: (context, storedValue, child) {
-                                  bool itsFavourite = storedValue.itsFavorite(
-                                    '{"id": "$_id", "mediaType": "$_mediaType"}',
-                                  );
+                                  bool itsFavourite = context
+                                      .read<FavoritesProvider>()
+                                      .itsFavorite(
+                                        '{"id": "$_id", "mediaType": "$_mediaType"}',
+                                      );
                                   return GestureDetector(
                                     onTap: () {
-                                      setState(() {
-                                        itsFavourite = !itsFavourite;
-                                      });
+                                      itsFavourite = !itsFavourite;
+
+                                      // ignore: avoid_print
+                                      print(
+                                          '{"id": "$_id", "mediaType": "$_mediaType"}');
 
                                       itsFavourite
                                           ? storedValue.addToFavorites(
@@ -361,14 +364,19 @@ class _MovieDetailState extends State<MovieDetail> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Text(
-                      _controller!.overview,
-                      style: StyleFont.medium
-                          .copyWith(color: Pallete.white, fontSize: 14),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
+                    if (_controller!.overview.isNotEmpty)
+                      Column(
+                        children: [
+                          Text(
+                            _controller!.overview,
+                            style: StyleFont.medium
+                                .copyWith(color: Pallete.white, fontSize: 14),
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),

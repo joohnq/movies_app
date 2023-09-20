@@ -18,7 +18,7 @@ class SeriesPopularController {
   bool get hasItem => itemCount != 0;
   int get itemCurrentPage => seriesResponseModel?.page ?? 1;
   int get itemTotalPages => seriesResponseModel?.totalPages ?? 1;
-  String get mediaType => "serie";
+  String get mediaType => "tv";
 
   Future<Either<MovieError, MovieAndSerieResponseModel>> fetchSeries(
       {int page = 1}) async {

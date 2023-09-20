@@ -98,7 +98,7 @@ class _SeriesState extends State<Series> {
                 ? const PreLoadCarouselSlider()
                 : CarouselSlider<SeriesPopularController>(
                     item: _controllerPopular,
-                    mediaType: "serie",
+                    mediaType: "tv",
                   ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
@@ -124,7 +124,7 @@ class _SeriesState extends State<Series> {
                 ? const PreLoadCarouselSlider()
                 : CarouselSlider<SeriesTrendingController>(
                     item: _controllerTrending,
-                    mediaType: "serie",
+                    mediaType: "tv",
                   ),
           ],
         ),

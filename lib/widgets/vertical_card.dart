@@ -144,13 +144,15 @@ class _VerticalCardState extends State<VerticalCard> {
                   top: 40,
                   child: Consumer<FavoritesProvider>(
                     builder: (context, storedValue, child) {
+                      bool itsFavourite =
+                          context.read<FavoritesProvider>().itsFavorite(
+                                '{"id": "${widget.id}", "mediaType": "${widget.mediaType}"}',
+                              );
                       return GestureDetector(
                         onTap: () {
-                          setState(() {
-                            itsFavorite = !itsFavorite;
-                          });
+                          itsFavourite = !itsFavourite;
 
-                          itsFavorite
+                          itsFavourite
                               ? storedValue.addToFavorites(
                                   '{"id": "${widget.id}", "mediaType": "${widget.mediaType}"}',
                                 )
@@ -158,7 +160,7 @@ class _VerticalCardState extends State<VerticalCard> {
                                   '{"id": "${widget.id}", "mediaType": "${widget.mediaType}"}',
                                 );
                         },
-                        child: itsFavorite
+                        child: itsFavourite
                             ? const Icon(
                                 Icons.bookmark,
                                 size: 30,

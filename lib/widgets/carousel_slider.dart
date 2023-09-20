@@ -27,6 +27,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
       height: 200,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.only(left: 10, right: 20),
         itemCount: widget.item.itemCount,
         itemBuilder: (BuildContext context, int index) {
           final MovieAndSerieModel value = widget.item.item[index];

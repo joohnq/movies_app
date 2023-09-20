@@ -49,7 +49,7 @@ class _AppState extends State<App> {
         ),
         child: BottomNavigationBar(
           currentIndex: _selectedIndex,
-          enableFeedback: false,
+          enableFeedback: true,
           backgroundColor: Pallete.grayDark,
           type: BottomNavigationBarType.fixed,
           unselectedLabelStyle: StyleFont.medium,

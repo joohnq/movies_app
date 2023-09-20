@@ -78,7 +78,7 @@ class FavoritesProvider extends ChangeNotifier {
   _fetchFavorite(favorite) async {
     FavouriteModel item = _toFavoriteModel(favorite);
     final result =
-        await _repository.fetchFavoritesDetails(item.id, item.mediaType);
+        await _repository.fetchFavourite(int.parse(item.id), item.mediaType);
     result.fold(
       (error) => _favouritesError = error.toString(),
       (detail) => {

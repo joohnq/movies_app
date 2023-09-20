@@ -17,7 +17,7 @@ class SeriesEmphasisController extends BaseEmphasisController {
   @override
   int get id => seriesEmphasis?.id ?? 0;
   @override
-  String get mediaType => "serie";
+  String get mediaType => "tv";
   @override
   String get name => seriesEmphasis?.name ?? "";
   @override

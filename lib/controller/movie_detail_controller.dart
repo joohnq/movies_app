@@ -70,7 +70,7 @@ class MovieDetailController extends BaseDetailController {
   Future<Either<MovieError, MovieAndSerieDetailModel>> fetchById(
       int id, String title) async {
     detailError = null;
-    final result = await _repository.fetchById(id, "movie", title);
+    final result = await _repository.fetchById(id.toString(), "movie");
     result.fold(
       (error) => detailError = error,
       (detail) => {

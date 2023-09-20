@@ -24,6 +24,7 @@ dependencies:
   infinite_scroll_pagination: ^4.0.0
   shared_preferences: ^2.2.1
   provider: ^6.0.5
+  salomon_bottom_bar: ^3.3.2
 
 dev_dependencies:
   flutter_test:

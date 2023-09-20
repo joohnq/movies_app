@@ -65,7 +65,7 @@ class Favourites extends StatelessWidget {
                               childAspectRatio: width * 0.64 / width,
                             ),
                             shrinkWrap: true,
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            padding: const EdgeInsets.symmetric(vertical: 20),
                             itemCount: storedValue.favoritesFetched.length,
                             itemBuilder: (context, index) {
                               List<MovieAndSerieDetailModel> items =

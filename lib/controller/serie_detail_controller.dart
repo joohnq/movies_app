@@ -28,7 +28,7 @@ class SerieDetailController extends BaseDetailController {
   @override
   List<Genre> get genres => serieDetail?.genres ?? <Genre>[];
   @override
-  String get mediaType => "serie";
+  String get mediaType => "tv";
   @override
   String get name => serieDetail?.name ?? "";
   @override
@@ -69,7 +69,7 @@ class SerieDetailController extends BaseDetailController {
   Future<Either<MovieError, MovieAndSerieDetailModel>> fetchById(
       int id, String title) async {
     detailError = null;
-    final result = await _repository.fetchById(id, "tv", title);
+    final result = await _repository.fetchById(id.toString(), "tv");
     result.fold(
       (error) => detailError = error,
       (detail) => {

@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_print
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:movies_app/core/api.dart';
@@ -18,7 +19,7 @@ class MovieRepository {
   ) async {
     try {
       final response =
-          await _dio.get('/$mediaType/popular?page=$page&language=en-US');
+          await _dio.get('/trending/$mediaType/week?page=$page&language=en-US');
       final model = MovieAndSerieResponseModel.fromJson(response.data);
       return Right(model);
     } on DioException catch (error) {
@@ -109,20 +110,39 @@ class MovieRepository {
   }
 
   Future<Either<MovieError, MovieAndSerieDetailModel>> fetchById(
-      int id, String mediaType, String title) async {
+      String id, String mediaType) async {
     try {
-      final response = await _dio.get('/movie/$id?language=en-US');
+      final response = await _dio.get('/$mediaType/$id?language=en-US');
       final model = MovieAndSerieDetailModel.fromJson(response.data);
-      if (model.originalTitle == title ||
-          model.title == title ||
-          model.name == title ||
-          model.originalName == title) {
-        return Right(model);
+      return Right(model);
+    } on DioException catch (error) {
+      if (error.response != null) {
+        return Left(
+          MovieRepositoryError(
+            error.response!.data['status_message'],
+          ),
+        );
       } else {
-        final response = await _dio.get('/tv/$id?language=en-US');
-        final model = MovieAndSerieDetailModel.fromJson(response.data);
-        return Right(model);
+        return Left(
+          MovieRepositoryError(kServerError),
+        );
       }
+    } on Exception catch (error) {
+      return Left(
+        MovieRepositoryError(
+          error.toString(),
+        ),
+      );
+    }
+  }
+
+  Future<Either<MovieError, MovieAndSerieDetailModel>> fetchFavourite(
+      int id, String mediaType) async {
+    try {
+      final response = await _dio.get('/$mediaType/$id?language=en-US');
+      final model = MovieAndSerieDetailModel.fromJson(response.data);
+      model.mediaType = mediaType;
+      return Right(model);
     } on DioException catch (error) {
       if (error.response != null) {
         return Left(
@@ -197,83 +217,4 @@ class MovieRepository {
       );
     }
   }
-
-  Future<Either<MovieError, MovieAndSerieDetailModel>> fetchFavoritesDetails(
-      String id, String mediaType) async {
-    final Dio dio = Dio(kDioOption);
-
-    try {
-      final response = await dio.get('/$mediaType/$id?language=en-US');
-      final model = MovieAndSerieDetailModel.fromJson(response.data);
-      model.mediaType = mediaType;
-      return Right(model);
-    } on DioException catch (error) {
-      if (error.response != null) {
-        return Left(
-          MovieRepositoryError(
-            error.response!.data['status_message'],
-          ),
-        );
-      } else {
-        return Left(
-          MovieRepositoryError(kServerError),
-        );
-      }
-    } catch (error) {
-      return Left(
-        MovieRepositoryError(
-          error.toString(),
-        ),
-      );
-    }
-  }
-
-  // Future<Either<MovieError, List<MovieAndSerieDetailModel>>>
-  //     fetchFavoritesDetails(List<String> favorites) async {
-  //   final Dio dio = Dio(kDioOption);
-  //   List<MovieAndSerieDetailModel> details = [];
-  //
-  //   for (String favorite in favorites) {
-  //     Map<dynamic, dynamic> jsonData = json.decode(favorite);
-  //
-  //     FavouriteModel item = FavouriteModel(
-  //       id: jsonData['id'],
-  //       mediaType: jsonData['mediaType'],
-  //     );
-  //
-  //     try {
-  //       final response =
-  //           await dio.get('/${item.mediaType}/${item.id}?language=en-US');
-  //       final model = MovieAndSerieDetailModel.fromJson(response.data);
-  //       model.mediaType = item.mediaType;
-  //       details.add(model);
-  //     } on DioException catch (error) {
-  //       if (error.response != null) {
-  //         return Left(
-  //           MovieRepositoryError(
-  //             error.response!.data['status_message'],
-  //           ),
-  //         );
-  //       } else {
-  //         return Left(
-  //           MovieRepositoryError(kServerError),
-  //         );
-  //       }
-  //     } catch (error) {
-  //       return Left(
-  //         MovieRepositoryError(
-  //           error.toString(),
-  //         ),
-  //       );
-  //     }
-  //   }
-  //
-  //   if (details.isNotEmpty) {
-  //     return Right(details);
-  //   } else {
-  //     return Left(
-  //       MovieRepositoryError('No details found for favorites.'),
-  //     );
-  //   }
-  // }
 }
