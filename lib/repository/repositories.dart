@@ -1,5 +1,4 @@
 // ignore_for_file: avoid_print
-
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:movies_app/core/api.dart';
@@ -198,4 +197,83 @@ class MovieRepository {
       );
     }
   }
+
+  Future<Either<MovieError, MovieAndSerieDetailModel>> fetchFavoritesDetails(
+      String id, String mediaType) async {
+    final Dio dio = Dio(kDioOption);
+
+    try {
+      final response = await dio.get('/$mediaType/$id?language=en-US');
+      final model = MovieAndSerieDetailModel.fromJson(response.data);
+      model.mediaType = mediaType;
+      return Right(model);
+    } on DioException catch (error) {
+      if (error.response != null) {
+        return Left(
+          MovieRepositoryError(
+            error.response!.data['status_message'],
+          ),
+        );
+      } else {
+        return Left(
+          MovieRepositoryError(kServerError),
+        );
+      }
+    } catch (error) {
+      return Left(
+        MovieRepositoryError(
+          error.toString(),
+        ),
+      );
+    }
+  }
+
+  // Future<Either<MovieError, List<MovieAndSerieDetailModel>>>
+  //     fetchFavoritesDetails(List<String> favorites) async {
+  //   final Dio dio = Dio(kDioOption);
+  //   List<MovieAndSerieDetailModel> details = [];
+  //
+  //   for (String favorite in favorites) {
+  //     Map<dynamic, dynamic> jsonData = json.decode(favorite);
+  //
+  //     FavouriteModel item = FavouriteModel(
+  //       id: jsonData['id'],
+  //       mediaType: jsonData['mediaType'],
+  //     );
+  //
+  //     try {
+  //       final response =
+  //           await dio.get('/${item.mediaType}/${item.id}?language=en-US');
+  //       final model = MovieAndSerieDetailModel.fromJson(response.data);
+  //       model.mediaType = item.mediaType;
+  //       details.add(model);
+  //     } on DioException catch (error) {
+  //       if (error.response != null) {
+  //         return Left(
+  //           MovieRepositoryError(
+  //             error.response!.data['status_message'],
+  //           ),
+  //         );
+  //       } else {
+  //         return Left(
+  //           MovieRepositoryError(kServerError),
+  //         );
+  //       }
+  //     } catch (error) {
+  //       return Left(
+  //         MovieRepositoryError(
+  //           error.toString(),
+  //         ),
+  //       );
+  //     }
+  //   }
+  //
+  //   if (details.isNotEmpty) {
+  //     return Right(details);
+  //   } else {
+  //     return Left(
+  //       MovieRepositoryError('No details found for favorites.'),
+  //     );
+  //   }
+  // }
 }

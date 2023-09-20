@@ -1,16 +1,27 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:movies_app/models/favorites_model.dart';
+import 'package:movies_app/models/movie_and_serie_detail_model.dart';
+import 'package:movies_app/repository/repositories.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FavoritesProvider extends ChangeNotifier {
+  final _repository = MovieRepository();
+
   List<String> _favorites = [];
-  final String _favouritesError = "";
+  String _favouritesError = "";
   late SharedPreferences _prefs;
+  final List<MovieAndSerieDetailModel> _favoritesFetched =
+      <MovieAndSerieDetailModel>[];
 
   FavoritesProvider() {
     _loadFavorites();
   }
 
   List<String> get favorites => _favorites;
+
+  List<MovieAndSerieDetailModel> get favoritesFetched => _favoritesFetched;
 
   String get favoritesError => _favouritesError;
 
@@ -21,6 +32,9 @@ class FavoritesProvider extends ChangeNotifier {
     final favorites = _prefs.getStringList('favorites');
     if (favorites != null) {
       _favorites = favorites;
+      for (String favorite in _favorites) {
+        _fetchFavorite(favorite);
+      }
       notifyListeners();
     }
   }
@@ -29,10 +43,11 @@ class FavoritesProvider extends ChangeNotifier {
     await _prefs.setStringList('favorites', _favorites);
   }
 
-  void addToFavorites(String favorite) {
+  void addToFavorites(String favorite) async {
     if (!_favorites.contains(favorite)) {
       _favorites.add(favorite);
       _saveFavorites();
+      _fetchFavorite(favorite);
       notifyListeners();
     }
   }
@@ -40,16 +55,44 @@ class FavoritesProvider extends ChangeNotifier {
   void removeFromFavorites(String favorite) {
     _favorites.remove(favorite);
     _saveFavorites();
+    FavouriteModel item = _toFavoriteModel(favorite);
+    _favoritesFetched.removeWhere(
+      (MovieAndSerieDetailModel favorite) =>
+          favorite.id.toString() == item.id &&
+          favorite.mediaType == item.mediaType,
+    );
     notifyListeners();
   }
 
   void cleanFavorites() {
     _favorites = <String>[];
     _saveFavorites();
+    _favoritesFetched.clear();
     notifyListeners();
   }
 
   bool itsFavorite(String favorite) {
     return _favorites.contains(favorite) ? true : false;
+  }
+
+  _fetchFavorite(favorite) async {
+    FavouriteModel item = _toFavoriteModel(favorite);
+    final result =
+        await _repository.fetchFavoritesDetails(item.id, item.mediaType);
+    result.fold(
+      (error) => _favouritesError = error.toString(),
+      (detail) => {
+        _favoritesFetched.add(detail),
+      },
+    );
+    notifyListeners();
+  }
+
+  FavouriteModel _toFavoriteModel(String favorite) {
+    Map<dynamic, dynamic> jsonData = json.decode(favorite);
+    return FavouriteModel(
+      id: jsonData['id'],
+      mediaType: jsonData['mediaType'],
+    );
   }
 }
