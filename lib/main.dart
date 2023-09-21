@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:movies_app/app.dart';
-import 'package:movies_app/controller/favourites_controller.dart';
+import 'package:movies_app/controller/favorites_controller.dart';
 import 'package:movies_app/views/discover.dart';
 import 'package:movies_app/views/movie_detail.dart';
 import 'package:provider/provider.dart';

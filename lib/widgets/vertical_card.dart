@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:movies_app/controller/favourites_controller.dart';
+import 'package:movies_app/controller/favorites_controller.dart';
 import 'package:movies_app/models/getx_atributes_model.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
@@ -49,7 +49,10 @@ class _VerticalCardState extends State<VerticalCard> {
         Get.toNamed(
           'moviedetail',
           arguments: GetxAtributes(
-              id: widget.id, mediaType: widget.mediaType, title: widget.title),
+            id: widget.id,
+            mediaType: widget.mediaType,
+            title: widget.title,
+          ),
         );
       },
       child: SizedBox(

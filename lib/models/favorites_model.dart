@@ -1,22 +1,22 @@
 import 'dart:convert';
 
-List<FavouriteModel> favouritesModelFromJson(String str) =>
-    List<FavouriteModel>.from(
-        json.decode(str).map((x) => FavouriteModel.fromJson(x)));
+List<FavoriteModel> favoritesModelFromJson(String str) =>
+    List<FavoriteModel>.from(
+        json.decode(str).map((x) => FavoriteModel.fromJson(x)));
 
-String favouritesModelToJson(List<FavouriteModel> data) =>
+String favoritesModelToJson(List<FavoriteModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class FavouriteModel {
+class FavoriteModel {
   String id;
   String mediaType;
 
-  FavouriteModel({
+  FavoriteModel({
     required this.id,
     required this.mediaType,
   });
 
-  factory FavouriteModel.fromJson(Map<dynamic, dynamic> json) => FavouriteModel(
+  factory FavoriteModel.fromJson(Map<dynamic, dynamic> json) => FavoriteModel(
         id: json["id"] ?? "",
         mediaType: json["mediaType"] ?? "",
       );

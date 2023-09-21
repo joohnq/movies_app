@@ -4,6 +4,7 @@ import 'package:movies_app/abstract/base_emphasis_controller.dart';
 import 'package:movies_app/controller/series_emphasis_controller.dart';
 import 'package:movies_app/controller/series_popular_controller.dart';
 import 'package:movies_app/controller/series_trending_controller.dart';
+import 'package:movies_app/models/getx_atributes_model.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
 import 'package:movies_app/widgets/carousel_slider.dart';
@@ -40,7 +41,7 @@ class _SeriesState extends State<Series> {
       _controllerEmphasis.loading = true;
     });
 
-    await _controllerPopular.fetchSeries(page: lastPage);
+    await _controllerPopular.fetchItems(page: lastPage);
     await _controllerTrending.fetchTrending(page: lastPage);
     await _controllerEmphasis.fetchEmphasis(page: lastPage);
 
@@ -84,6 +85,9 @@ class _SeriesState extends State<Series> {
                     onTap: () {
                       Get.toNamed(
                         '/seemore',
+                        arguments: GetxAtributes(
+                          mediaType: "tv",
+                        ),
                       );
                     },
                     child: Text(
@@ -110,6 +114,9 @@ class _SeriesState extends State<Series> {
                     onTap: () {
                       Get.toNamed(
                         '/seemore',
+                        arguments: GetxAtributes(
+                          mediaType: "tv",
+                        ),
                       );
                     },
                     child: Text(

@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/tabler.dart';
-import 'package:movies_app/controller/favourites_controller.dart';
+import 'package:movies_app/controller/favorites_controller.dart';
 import 'package:movies_app/models/movie_and_serie_detail_model.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
@@ -10,8 +10,8 @@ import 'package:movies_app/widgets/custom_title.dart';
 import 'package:movies_app/widgets/vertical_card.dart';
 import 'package:provider/provider.dart';
 
-class Favourites extends StatelessWidget {
-  const Favourites({
+class Favorites extends StatelessWidget {
+  const Favorites({
     super.key,
   });
 
@@ -37,7 +37,7 @@ class Favourites extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const CustomTitle(text: "Favourites"),
+                        const CustomTitle(text: "Favorites"),
                         Consumer<FavoritesProvider>(
                           builder: (context, storedValue, child) {
                             return GestureDetector(

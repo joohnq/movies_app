@@ -10,7 +10,7 @@ class FavoritesProvider extends ChangeNotifier {
   final _repository = MovieRepository();
 
   List<String> _favorites = [];
-  String _favouritesError = "";
+  String _favoritesError = "";
   late SharedPreferences _prefs;
   final List<MovieAndSerieDetailModel> _favoritesFetched =
       <MovieAndSerieDetailModel>[];
@@ -23,7 +23,7 @@ class FavoritesProvider extends ChangeNotifier {
 
   List<MovieAndSerieDetailModel> get favoritesFetched => _favoritesFetched;
 
-  String get favoritesError => _favouritesError;
+  String get favoritesError => _favoritesError;
 
   int get favoritesCount => _favorites.length;
 
@@ -55,7 +55,7 @@ class FavoritesProvider extends ChangeNotifier {
   void removeFromFavorites(String favorite) {
     _favorites.remove(favorite);
     _saveFavorites();
-    FavouriteModel item = _toFavoriteModel(favorite);
+    FavoriteModel item = _toFavoriteModel(favorite);
     _favoritesFetched.removeWhere(
       (MovieAndSerieDetailModel favorite) =>
           favorite.id.toString() == item.id &&
@@ -76,11 +76,11 @@ class FavoritesProvider extends ChangeNotifier {
   }
 
   _fetchFavorite(favorite) async {
-    FavouriteModel item = _toFavoriteModel(favorite);
+    FavoriteModel item = _toFavoriteModel(favorite);
     final result =
         await _repository.fetchFavourite(int.parse(item.id), item.mediaType);
     result.fold(
-      (error) => _favouritesError = error.toString(),
+      (error) => _favoritesError = error.toString(),
       (detail) => {
         _favoritesFetched.add(detail),
       },
@@ -88,9 +88,9 @@ class FavoritesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  FavouriteModel _toFavoriteModel(String favorite) {
+  FavoriteModel _toFavoriteModel(String favorite) {
     Map<dynamic, dynamic> jsonData = json.decode(favorite);
-    return FavouriteModel(
+    return FavoriteModel(
       id: jsonData['id'],
       mediaType: jsonData['mediaType'],
     );

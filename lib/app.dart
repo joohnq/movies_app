@@ -5,7 +5,7 @@ import 'package:iconify_flutter/icons/ri.dart';
 import 'package:iconify_flutter/icons/tabler.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
-import 'package:movies_app/views/favourites.dart';
+import 'package:movies_app/views/favorites.dart';
 import 'package:movies_app/views/movies.dart';
 import 'package:movies_app/views/search.dart';
 import 'package:movies_app/views/series.dart';
@@ -31,7 +31,7 @@ class _AppState extends State<App> {
       const Movies(),
       const Search(),
       const Series(),
-      const Favourites(),
+      const Favorites(),
     ];
 
     return Scaffold(
@@ -103,7 +103,7 @@ class _AppState extends State<App> {
               ),
             ),
             BottomNavigationBarItem(
-              label: "Favourites",
+              label: "Favorites",
               activeIcon: Iconify(
                 Ri.bookmark_fill,
                 color: Pallete.white,
