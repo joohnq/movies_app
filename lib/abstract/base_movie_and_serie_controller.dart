@@ -14,4 +14,11 @@ abstract class BaseMovieAndSerieController {
 
   Future<Either<MovieError, MovieAndSerieResponseModel>> fetchItems(
       {int page = 1});
+
+  Future<Either<MovieError, MovieAndSerieResponseModel>> fetchMoviesByCategory(
+      String category,
+      {int page = 1});
+
+  Future<Either<MovieError, MovieAndSerieResponseModel>>
+      fetchMoreMoviesByCategory(String category, {int page = 1});
 }

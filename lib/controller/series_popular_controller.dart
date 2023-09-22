@@ -47,4 +47,19 @@ class SeriesPopularController extends BaseMovieAndSerieController {
     );
     return result;
   }
+
+  @override
+  Future<Either<MovieError, MovieAndSerieResponseModel>> fetchMoviesByCategory(
+      String category,
+      {int page = 1}) {
+    // TODO: implement fetchMoviesByCategory
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<MovieError, MovieAndSerieResponseModel>>
+      fetchMoreMoviesByCategory(String category, {int page = 1}) {
+    // TODO: implement fetchMoreMoviesByCategory
+    throw UnimplementedError();
+  }
 }

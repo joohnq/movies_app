@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:movies_app/abstract/base_detail_controller.dart';
 import 'package:movies_app/controller/favorites_controller.dart';
@@ -65,6 +66,10 @@ class _MovieDetailState extends State<MovieDetail> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     double statusBar = MediaQuery.of(context).padding.top;
@@ -145,11 +150,6 @@ class _MovieDetailState extends State<MovieDetail> {
                             return GestureDetector(
                               onTap: () {
                                 itsFavourite = !itsFavourite;
-
-                                // ignore: avoid_print
-                                print(
-                                    '{"id": "$_id", "mediaType": "$_mediaType"}');
-
                                 itsFavourite
                                     ? storedValue.addToFavorites(
                                         '{"id": "$_id", "mediaType": "$_mediaType"}',

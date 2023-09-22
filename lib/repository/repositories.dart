@@ -109,6 +109,40 @@ class MovieRepository {
     }
   }
 
+  Future<Either<MovieError, MovieAndSerieResponseModel>> fetchByCategory(
+    int page,
+    String category,
+  ) async {
+    try {
+      bool itsTv = category == "100";
+      final response = await _dio.get(
+          '/discover/${itsTv ? "tv" : "movie"}?include_adult=false&include_video=false&language=en-US&page=$page&sort_by=popularity.desc&with_genres=${category == "0" || category == "100" ? "" : category}');
+      final model = MovieAndSerieResponseModel.fromJson(response.data);
+      for (MovieAndSerieModel item in model.results) {
+        item.mediaType = itsTv ? "tv" : "movie";
+      }
+      return Right(model);
+    } on DioException catch (error) {
+      if (error.response != null) {
+        return Left(
+          MovieRepositoryError(
+            error.response!.data['status_message'],
+          ),
+        );
+      } else {
+        return Left(
+          MovieRepositoryError(kServerError),
+        );
+      }
+    } on Exception catch (error) {
+      return Left(
+        MovieRepositoryError(
+          error.toString(),
+        ),
+      );
+    }
+  }
+
   Future<Either<MovieError, MovieAndSerieDetailModel>> fetchById(
       String id, String mediaType) async {
     try {

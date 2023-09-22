@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:movies_app/abstract/base_movie_and_serie_controller.dart';
 import 'package:movies_app/controller/movies_popular_controller.dart';
@@ -7,6 +8,7 @@ import 'package:movies_app/core/categories.dart';
 import 'package:movies_app/models/movie_and_serie_model.dart';
 import 'package:movies_app/style/colors.dart';
 import 'package:movies_app/style/font.dart';
+import 'package:movies_app/widgets/pre_load_vertical_card.dart';
 import 'package:movies_app/widgets/vertical_card.dart';
 
 class Discover extends StatefulWidget {
@@ -31,29 +33,29 @@ class _DiscoverState extends State<Discover> {
     _mediaType == "movie"
         ? _controller = MoviesPopularController()
         : _controller = SeriesPopularController();
-    _initialize();
-    _initScrollListener();
+    _initialize("");
+    _initScrollListener("");
   }
 
-  _initScrollListener() async {
+  _initScrollListener(category) async {
     _scrollController.addListener(() async {
       if (_scrollController.offset >=
-          _scrollController.position.maxScrollExtent - 400) {
+          _scrollController.position.maxScrollExtent - 600) {
         if (_controller.itemCurrentPage == lastPage) {
           lastPage++;
-          await _controller.fetchItems(page: lastPage);
+          await _controller.fetchMoreMoviesByCategory(category, page: lastPage);
           setState(() {});
         }
       }
     });
   }
 
-  _initialize() async {
+  _initialize(category) async {
     setState(() {
       _controller.loading = true;
     });
 
-    await _controller.fetchItems(page: lastPage);
+    await _controller.fetchMoviesByCategory(category, page: lastPage);
 
     setState(() {
       _controller.loading = false;
@@ -68,15 +70,22 @@ class _DiscoverState extends State<Discover> {
     );
   }
 
-  _changeSelectedIndex(int index) {
+  _changeSelectedIndex(int index, String category) async {
     setState(() {
       selectedItem = index;
     });
     _scrollToTop();
+    lastPage++;
+    await _controller.fetchMoviesByCategory(category, page: lastPage);
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     double statusBar = MediaQuery.of(context).padding.top;
@@ -98,7 +107,7 @@ class _DiscoverState extends State<Discover> {
                   Map<dynamic, dynamic> item = categories[index];
                   return GestureDetector(
                     onTap: () {
-                      _changeSelectedIndex(index);
+                      _changeSelectedIndex(index, item['id']);
                     },
                     child: Container(
                       margin: const EdgeInsets.only(right: 10),
@@ -134,7 +143,24 @@ class _DiscoverState extends State<Discover> {
             SizedBox(
               height: height * 0.93 - statusBar - 30,
               child: _controller.loading
-                  ? const CircularProgressIndicator()
+                  ? GridView.builder(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 10,
+                      ),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 0,
+                        crossAxisSpacing: 10,
+                        childAspectRatio: width * 0.64 / width,
+                      ),
+                      shrinkWrap: true,
+                      itemCount: 6,
+                      itemBuilder: (context, index) {
+                        return const PreLoadVerticalCard();
+                      },
+                    )
                   : GridView.builder(
                       controller: _scrollController,
                       padding: const EdgeInsets.symmetric(

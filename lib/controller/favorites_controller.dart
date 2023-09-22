@@ -44,6 +44,10 @@ class FavoritesProvider extends ChangeNotifier {
   }
 
   void addToFavorites(String favorite) async {
+    // ignore: avoid_print
+    print('entrou');
+    // ignore: avoid_print
+    print(favorite);
     if (!_favorites.contains(favorite)) {
       _favorites.add(favorite);
       _saveFavorites();

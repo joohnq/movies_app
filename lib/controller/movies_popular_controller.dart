@@ -17,12 +17,16 @@ class MoviesPopularController extends BaseMovieAndSerieController {
 
   @override
   int get itemCount => item.length;
+
   @override
   bool get hasItem => itemCount != 0;
+
   @override
   int get itemCurrentPage => movieResponseModel?.page ?? 1;
+
   @override
   int get itemTotalPages => movieResponseModel?.totalPages ?? 1;
+
   @override
   String get mediaType => "movie";
 
@@ -53,6 +57,51 @@ class MoviesPopularController extends BaseMovieAndSerieController {
       {int page = 1}) async {
     itemError = null;
     final result = await _repository.fetchByName(page, title);
+    result.fold(
+      (error) => itemError = error,
+      (movie) => {
+        if (movieResponseModel != null)
+          {
+            movieResponseModel?.page = movie.page,
+            movieResponseModel?.results = movie.results,
+          }
+        else
+          {
+            movieResponseModel = movie,
+          },
+      },
+    );
+    return result;
+  }
+
+  @override
+  Future<Either<MovieError, MovieAndSerieResponseModel>>
+      fetchMoreMoviesByCategory(String category, {int page = 1}) async {
+    itemError = null;
+    final result = await _repository.fetchByCategory(page, category);
+    result.fold(
+      (error) => itemError = error,
+      (movie) => {
+        if (movieResponseModel != null)
+          {
+            movieResponseModel?.page = movie.page,
+            movieResponseModel?.results.addAll(movie.results),
+          }
+        else
+          {
+            movieResponseModel = movie,
+          },
+      },
+    );
+    return result;
+  }
+
+  @override
+  Future<Either<MovieError, MovieAndSerieResponseModel>> fetchMoviesByCategory(
+      String category,
+      {int page = 1}) async {
+    itemError = null;
+    final result = await _repository.fetchByCategory(page, category);
     result.fold(
       (error) => itemError = error,
       (movie) => {

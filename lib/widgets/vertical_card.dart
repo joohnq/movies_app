@@ -33,8 +33,6 @@ class _VerticalCardState extends State<VerticalCard> {
   @override
   void initState() {
     super.initState();
-    // ignore: avoid_print
-    print(widget.mediaType);
     itsFavorite = context.read<FavoritesProvider>().itsFavorite(
           '{"id": "${widget.id}", "mediaType": "${widget.mediaType}"}',
         );
@@ -153,6 +151,10 @@ class _VerticalCardState extends State<VerticalCard> {
                               );
                       return GestureDetector(
                         onTap: () {
+                          // ignore: avoid_print
+                          print(widget.mediaType == ""
+                              ? "vazio"
+                              : widget.mediaType);
                           itsFavourite = !itsFavourite;
 
                           itsFavourite
